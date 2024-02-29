@@ -1,6 +1,3 @@
-<div align="center"> <img alt="VbenAdmin Logo" width="200" height="200" src="./public/logo.svg"> </a> <br> <br>
-
-
 <h1>QuickInit Pro - Frontend</h1>
 
 </div>
