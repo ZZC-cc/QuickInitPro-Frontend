@@ -146,7 +146,7 @@ function hiddenSuccess() {
         >
           <a-card
               :bordered="false"
-              style="borderradius: 0;"
+              border-rd-0
               class="cursor-pointer hover:shadow-[0_4px_20px_-5px_rgba(0,0,0,0.35)] transition duration-300"
           >
             <template #default>
@@ -158,20 +158,18 @@ function hiddenSuccess() {
                   <div style="font-size: 18px; font-weight: 500">
                     {{ item.title }}
                   </div>
-
                   <div mt1>
-                    <a-tag v-for="tag in item.tags" :key="tag.id" color="blue" style="border-radius: 0">
+                    <a-tag v-for="tag in item.tags" :key="tag.id" color="blue" border-rd-0>
                       {{ tag }}
                     </a-tag>
                   </div>
-                  <div mt1
-                       style="color: #ff4000;font-weight: 550;font-size: 16px">
+                  <div mt1 c-red-5 font-bold text-16px>
                     ￥{{ item.price }}元
                   </div>
-                  <div style="color: #a1a1a1">
+                  <div c-gray-4>
                     <span>库存：</span> {{ item.stock }}
                   </div>
-                  <div h-16 overflow-hidden overflow style="color: #9c9e9c">
+                  <div h-16 overflow-hidden overflow c-gray-4>
                     {{ item.description }}
                   </div>
                 </div>

@@ -13,15 +13,6 @@ defineProps<{
 
 const {
   avatar,
-  name,
-  email,
-  mobile,
-  sex,
-  userId,
-  role,
-  username,
-  address,
-  description,
 } = useUserStore()
 
 function getArticleDetailLink(postId: any) {
@@ -40,10 +31,10 @@ function getArticleDetailLink(postId: any) {
       <template #renderItem="{ item }">
         <a-list-item>
           <a-list-item-meta>
-            <template #title>
-              <a :href="getArticleDetailLink(item.id)" class="text-xl font-bold">{{ item.title }}</a>
+            <template #title mt1>
+              <a :href="getArticleDetailLink(item.id)" text-xl font-bold>{{ item.title }}</a>
               <div class="my-3">
-                <a-tag v-for="(tag, index) in item.tagList" :key="index" color="blue" style="border-radius: 0">
+                <a-tag v-for="(tag, index) in item.tagList" :key="index" color="blue" border-rd-0>
                   {{ tag }}
                 </a-tag>
               </div>
@@ -52,20 +43,20 @@ function getArticleDetailLink(postId: any) {
           <div>
             <div>
               {{ item.content.slice(0, 200) }}<span v-if="item.content.length > 200"
-                                                    class="text-gray-400">.......</span>
+                                                    text-gray-400>.......</span>
             </div>
 
-            <div class="flex items-center">
-            <span class="flex items-center" mt2>
-              <a-avatar :size="20" class="mr-2">
+            <div flex items-center>
+            <span flex items-center mt3 mb2>
+              <a-avatar :size="20" mr-2>
                 <template #icon>
                   <img :src="avatar" alt="">
                 </template>
               </a-avatar>
-              <span style="color: rgb(22, 119, 255);">
-                {{ name }}
+              <span c-blue-6>
+                {{ item.name }}
               </span>
-              <span style="color: rgba(221,221,221,0.28);margin: 0 10px">
+              <span c-gray-3 ml-10px mr-10px>
                 |
               </span>
               <span style="color: rgb(185,185,185);">
