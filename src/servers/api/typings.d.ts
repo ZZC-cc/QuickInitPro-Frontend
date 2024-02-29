@@ -4,6 +4,11 @@ declare namespace API {
     data?: boolean;
     message?: string;
   };
+  type BaseResponseHomeVO = {
+    code?: number;
+    data?: HomeVO;
+    message?: string;
+  };
   type BaseResponseListCommentVO = {
     code?: number;
     data?: CommentVO[];
@@ -179,6 +184,20 @@ declare namespace API {
   type getUsersBySearchTextUsingGETParams = {
     /** searchText */
     searchText?: string;
+  };
+  type HomeVO = {
+    commentCount?: number;
+    commentList?: CommentVO[];
+    notice?: Notice;
+    orderCount?: number;
+    orderList?: OrderVO[];
+    orderTotalPrice?: number;
+    postCount?: number;
+    postList?: PostVO[];
+    productCount?: number;
+    productList?: ProductVO[];
+    userCount?: number;
+    visitCount?: number;
   };
   type LoginRequest = {
     password?: string;

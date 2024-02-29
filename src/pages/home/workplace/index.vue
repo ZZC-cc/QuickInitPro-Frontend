@@ -1,290 +1,130 @@
 <script setup lang="ts">
-import { Radar } from '@antv/g2plot'
+import {
+  NotificationTwoTone
+} from "@ant-design/icons-vue";
 import EditableLinkGroup from '~/pages/dashboard/workplace/editable-link-group.vue'
+import {message, notification} from "ant-design-vue";
+import {addViewUsingGet, getHomeUsingGet} from "~/servers/api/homeController.ts";
+import HomeVO = API.HomeVO;
+import {getNewsNoticeUsingGet} from "~/servers/api/noticeController.ts";
+import ProductVO = API.ProductVO;
+import PostVO = API.PostVO;
+import OrderVO = API.OrderVO;
+import CommentVO = API.CommentVO;
+import Notice = API.Notice;
+
+const productsList = ref<ProductVO>()
+const postsList = ref<PostVO>()
+const ordersList = ref<OrderVO>()
+const commentsList = ref<CommentVO>()
+const noticeList = ref<Notice>()
+
+const {
+  avatar,
+  name,
+  email,
+  mobile,
+  sex,
+  userId,
+  role,
+  username,
+  address,
+  description,
+} = useUserStore()
+
+const HomeData = ref<HomeVO>();
+
+async function getData() {
+  try {
+    const response = await getHomeUsingGet();
+    HomeData.value = response.data;
+    productsList.value = response.data?.productList;
+    postsList.value = response.data?.postList;
+    ordersList.value = response.data?.orderList;
+    commentsList.value = response.data?.commentList;
+    noticeList.value = response.data?.notice;
+    console.log(noticeList.value)
+  } catch (error) {
+    message.error("获取数据失败:" + error);
+  }
+}
+
+
+const currentTime = ref(new Date());
+
+onMounted(() => {
+  updateTime();
+  getData();
+  setInterval(updateTime, 60000);
+  addViewUsingGet()
+  getNewsNoticeUsingGet().then((res) => {
+    if (res.code === 200 && res.data) {
+      notification.success({
+        message: res.data?.title,
+        description: res.data?.content,
+        duration: 5,
+        style: {
+          width: "100%",
+          whiteSpace: 'pre-line',
+          marginTop: '30px',
+        },
+      })
+    }
+  })
+});
+
+const greeting = computed(() => {
+  const hour = currentTime.value.getHours();
+
+  if (hour >= 5 && hour < 12) {
+    return '早上好';
+  } else if (hour >= 12 && hour < 14) {
+    return '中午好';
+  } else if (hour >= 14 && hour < 18) {
+    return '下午好';
+  } else if (hour >= 18 && hour < 24) {
+    return '晚上好';
+  } else {
+    return '凌晨好';
+  }
+});
+
+function updateTime() {
+  currentTime.value = new Date();
+}
 
 defineOptions({
   name: 'Workplace',
 })
 
 const currentUser = {
-  avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
-  name: '吴彦祖',
-  userid: '00000001',
-  email: 'antdesign@alipay.com',
-  signature: '海纳百川，有容乃大',
-  title: '交互专家',
-  group: '蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED',
+  avatar: avatar,
+  name: name,
+  userid: userId,
+  email: email,
+  description: description
 }
 
-const projectNotice = [
-  {
-    id: 'xxx1',
-    title: 'Alipay',
-    logo: 'https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE.png',
-    description: '那是一种内在的东西，他们到达不了，也无法触及的',
-    updatedAt: '几秒前',
-    member: '科学搬砖组',
-    href: '',
-    memberLink: '',
-  },
-  {
-    id: 'xxx2',
-    title: 'Angular',
-    logo: 'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png',
-    description: '希望是一个好东西，也许是最好的，好东西是不会消亡的',
-    updatedAt: '6 年前',
-    member: '全组都是吴彦祖',
-    href: '',
-    memberLink: '',
-  },
-  {
-    id: 'xxx3',
-    title: 'Ant Design',
-    logo: 'https://gw.alipayobjects.com/zos/rmsportal/dURIMkkrRFpPgTuzkwnB.png',
-    description: '城镇中有那么多的酒馆，她却偏偏走进了我的酒馆',
-    updatedAt: '几秒前',
-    member: '中二少女团',
-    href: '',
-    memberLink: '',
-  },
-  {
-    id: 'xxx4',
-    title: 'Ant Design Pro',
-    logo: 'https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png',
-    description: '那时候我只会想自己想要什么，从不想自己拥有什么',
-    updatedAt: '6 年前',
-    member: '程序员日常',
-    href: '',
-    memberLink: '',
-  },
-  {
-    id: 'xxx5',
-    title: 'Bootstrap',
-    logo: 'https://gw.alipayobjects.com/zos/rmsportal/siCrBXXhmvTQGWPNLBow.png',
-    description: '凛冬将至',
-    updatedAt: '6 年前',
-    member: '高逼格设计天团',
-    href: '',
-    memberLink: '',
-  },
-  {
-    id: 'xxx6',
-    title: 'React',
-    logo: 'https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png',
-    description: '生命就像一盒巧克力，结果往往出人意料',
-    updatedAt: '6 年前',
-    member: '骗你来学计算机',
-    href: '',
-    memberLink: '',
-  },
-]
 
-const activities = [
-  {
-    id: 'trend-1',
-    updatedAt: '几秒前',
-    user: {
-      name: '曲丽丽',
-      avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
-    },
-    group: {
-      name: '高逼格设计天团',
-      link: 'http://github.com/',
-    },
-    project: {
-      name: '六月迭代',
-      link: 'http://github.com/',
-    },
-    template1: '在',
-    template2: '新建项目',
-  },
-  {
-    id: 'trend-2',
-    updatedAt: '几秒前',
-    user: {
-      name: '付小小',
-      avatar: 'https://gw.alipayobjects.com/zos/rmsportal/cnrhVkzwxjPwAaCfPbdc.png',
-    },
-    group: {
-      name: '高逼格设计天团',
-      link: 'http://github.com/',
-    },
-    project: {
-      name: '六月迭代',
-      link: 'http://github.com/',
-    },
-    template1: '在',
-    template2: '新建项目',
-  },
-  {
-    id: 'trend-3',
-    updatedAt: '几秒前',
-    user: {
-      name: '林东东',
-      avatar: 'https://gw.alipayobjects.com/zos/rmsportal/gaOngJwsRYRaVAuXXcmB.png',
-    },
-    group: {
-      name: '中二少女团',
-      link: 'http://github.com/',
-    },
-    project: {
-      name: '六月迭代',
-      link: 'http://github.com/',
-    },
-    template1: '在',
-    template2: '新建项目',
-  },
-  {
-    id: 'trend-4',
-    updatedAt: '几秒前',
-    user: {
-      name: '周星星',
-      avatar: 'https://gw.alipayobjects.com/zos/rmsportal/WhxKECPNujWoWEFNdnJE.png',
-    },
-    group: {
-      name: '5 月日常迭代',
-      link: 'http://github.com/',
-    },
-    template1: '将',
-    template2: '更新至已发布状态',
-  },
-  {
-    id: 'trend-5',
-    updatedAt: '几秒前',
-    user: {
-      name: '朱偏右',
-      avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ubnKSIfAJTxIgXOKlciN.png',
-    },
-    group: {
-      name: '工程效能',
-      link: 'http://github.com/',
-    },
-    project: {
-      name: '留言',
-      link: 'http://github.com/',
-    },
-    template1: '在',
-    template2: '发布了',
-  },
-  {
-    id: 'trend-6',
-    updatedAt: '几秒前',
-    user: {
-      name: '乐哥',
-      avatar: 'https://gw.alipayobjects.com/zos/rmsportal/jZUIxmJycoymBprLOUbT.png',
-    },
-    group: {
-      name: '程序员日常',
-      link: 'http://github.com/',
-    },
-    project: {
-      name: '品牌迭代',
-      link: 'http://github.com/',
-    },
-    template1: '在',
-    template2: '新建项目',
-  },
-]
+const formatTimeAgo = (timeString: string) => {
+  const currentTime = new Date();
+  const createTime = new Date(timeString);
+  const timeDifference = currentTime.getTime() - createTime.getTime();
+  const seconds = Math.floor(timeDifference / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
 
-const radarContainer = ref()
-const radarData = [
-  {
-    name: '个人',
-    label: '引用',
-    value: 10,
-  },
-  {
-    name: '个人',
-    label: '口碑',
-    value: 8,
-  },
-  {
-    name: '个人',
-    label: '产量',
-    value: 4,
-  },
-  {
-    name: '个人',
-    label: '贡献',
-    value: 5,
-  },
-  {
-    name: '个人',
-    label: '热度',
-    value: 7,
-  },
-  {
-    name: '团队',
-    label: '引用',
-    value: 3,
-  },
-  {
-    name: '团队',
-    label: '口碑',
-    value: 9,
-  },
-  {
-    name: '团队',
-    label: '产量',
-    value: 6,
-  },
-  {
-    name: '团队',
-    label: '贡献',
-    value: 3,
-  },
-  {
-    name: '团队',
-    label: '热度',
-    value: 1,
-  },
-  {
-    name: '部门',
-    label: '引用',
-    value: 4,
-  },
-  {
-    name: '部门',
-    label: '口碑',
-    value: 1,
-  },
-  {
-    name: '部门',
-    label: '产量',
-    value: 6,
-  },
-  {
-    name: '部门',
-    label: '贡献',
-    value: 5,
-  },
-  {
-    name: '部门',
-    label: '热度',
-    value: 7,
-  },
-]
-let radar: Radar
-onMounted(() => {
-  radar = new Radar(radarContainer.value, {
-    data: radarData,
-    xField: 'label',
-    yField: 'value',
-    seriesField: 'name',
-    point: {
-      size: 4,
-    },
-    legend: {
-      layout: 'horizontal',
-      position: 'bottom',
-    },
-  })
-  radar.render()
-})
-
-onBeforeUnmount(() => {
-  radar?.destroy?.()
-})
+  if (days > 0) {
+    return `${days}天前`;
+  } else if (hours > 0) {
+    return `${hours}小时前`;
+  } else if (minutes > 0) {
+    return `${minutes}分钟前`;
+  } else {
+    return `${seconds}秒前`;
+  }
+};
 </script>
 
 <template>
@@ -292,16 +132,16 @@ onBeforeUnmount(() => {
     <template #content>
       <div class="pageHeaderContent">
         <div class="avatar">
-          <a-avatar size="large" :src="currentUser.avatar" />
+          <a-avatar size="large" :src="currentUser.avatar"/>
         </div>
         <div class="content">
           <div class="contentTitle">
-            早安，
+            {{ greeting }}，
             {{ currentUser.name }}
             ，祝你开心每一天！
           </div>
           <div>
-            {{ currentUser.title }} |{{ currentUser.group }}
+            {{ currentUser.description }}
           </div>
         </div>
       </div>
@@ -309,13 +149,25 @@ onBeforeUnmount(() => {
     <template #extraContent>
       <div class="extraContent">
         <div class="statItem">
-          <a-statistic title="项目数" :value="56" />
+          <a-statistic title="用户数" :value="HomeData?.userCount" suffix="位"/>
         </div>
         <div class="statItem">
-          <a-statistic title="团队内排名" :value="8" suffix="/ 24" />
+          <a-statistic title="文章数" :value="HomeData?.postCount" suffix="篇"/>
         </div>
         <div class="statItem">
-          <a-statistic title="项目访问" :value="2223" />
+          <a-statistic title="评论数" :value="HomeData?.commentCount" suffix="条"/>
+        </div>
+        <div class="statItem">
+          <a-statistic title="商品数" :value="HomeData?.productCount" suffix="件"/>
+        </div>
+        <div class="statItem">
+          <a-statistic title="订单数" :value="HomeData?.orderCount" suffix="单"/>
+        </div>
+        <div class="statItem">
+          <a-statistic title="订单总金额" :value="HomeData?.orderTotalPrice" suffix="元"/>
+        </div>
+        <div class="statItem">
+          <a-statistic title="项目访问" :value="HomeData?.visitCount" suffix="次"/>
         </div>
       </div>
     </template>
@@ -323,75 +175,128 @@ onBeforeUnmount(() => {
     <a-row :gutter="24">
       <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24">
         <a-card
-          class="projectList"
-          :style="{ marginBottom: '24px' }"
-          title="进行中的项目"
-          :bordered="false"
-          :loading="false"
-          :body-style="{ padding: 0 }"
+            class="projectList"
+            :style="{ marginBottom: '24px' }"
+            title="最新文章"
+            :bordered="false"
+            :loading="false"
+            :body-style="{ padding: 0 }"
         >
           <template #extra>
-            <router-link to="/">
-              全部项目
+            <router-link to="/post">
+              全部文章
             </router-link>
           </template>
-          <a-card-grid v-for="item in projectNotice" :key="item.id" class="projectGrid">
+          <a-card-grid v-for="item in postsList" :key="item.id" class="projectGrid">
             <a-card :body-style="{ padding: 0 }" style="box-shadow: none" :bordered="false">
               <a-card-meta
-                :description="item.description"
-                class="w-full"
+                  :description="item.content.slice(0,100)"
+                  class="w-full"
               >
                 <template #title>
-                  <div class="cardTitle">
-                    <a-avatar size="small" :src="item.logo" />
-                    <router-link :to="item.href">
+                  <div class="cardTitle" ml--10px>
+                    <router-link to="/post">
                       {{ item.title }}
                     </router-link>
                   </div>
                 </template>
               </a-card-meta>
-              <div class="projectItemContent">
-                <router-link :to="item.memberLink">
-                  {{ item.member || '' }}
-                </router-link>
-                <span class="datetime" ml-2 :title="item.updatedAt">
-                  {{ item.updatedAt }}
+              <div mt3 w-full>
+                <a-tag v-for="tag in item.tagList" color="blue" border-rd-0>{{ tag }}</a-tag>
+              </div>
+              <div mt3>
+                <span><a-avatar :src="item.user.avatar" size="small"/><span ml-5px>{{ item.user.name }}</span></span>
+                <span c-gray-3 ml3 mr1>|</span>
+                <span class="datetime" ml-2 :title="item.createTime">
+                  {{ item.createTime }}
                 </span>
               </div>
             </a-card>
           </a-card-grid>
         </a-card>
         <a-card
-          :body-style="{ padding: 0 }"
-          :bordered="false"
-          class="activeCard"
-          title="动态"
-          :loading="false"
+            class="productList"
+            :style="{ marginBottom: '24px' }"
+            title="最新商品"
+            :bordered="false"
+            :loading="false"
+            :body-style="{ padding: 0 }"
         >
+          <template #extra>
+            <router-link to="/product">
+              全部商品
+            </router-link>
+          </template>
+          <a-card-grid v-for="item in productsList" :key="item.id" class="projectGrid">
+            <a-card :body-style="{ padding: 0 }" style="box-shadow: none" :bordered="false">
+              <a-card-meta
+                  class="w-full"
+              >
+                <template #description>
+                  <a-row :span="24" h-140>
+                    <a-col :span="6">
+                      <a-image :src="item.images" w-20px h-20px></a-image>
+                    </a-col>
+                    <a-col :span="1">
+                    </a-col>
+                    <a-col :span="17">
+                      {{ item.description }}
+                    </a-col>
+                  </a-row>
+                </template>
+                <template #title>
+                  <div class="cardTitle" ml--10px>
+                    <router-link to="/product">
+                      {{ item.title }}
+                    </router-link>
+                  </div>
+                </template>
+              </a-card-meta>
+              <div mt3>
+                <span text-16px c-red-5 font-bold ml-10px mr-18px>￥{{ item.price }}</span>
+                <span class="datetime" ml-2 :title="item.createTime">
+                  {{ item.createTime }}
+                </span>
+              </div>
+            </a-card>
+          </a-card-grid>
+        </a-card>
+        <a-card
+            :body-style="{ padding: 0 }"
+            :bordered="false"
+            class="activeCard"
+            title="评论动态"
+            :loading="false"
+        >
+          <template #extra>
+            <router-link to="/comment-crud-table">
+              评论管理
+            </router-link>
+          </template>
           <a-list
-            :data-source="activities"
-            class="activitiesList"
+              :data-source="commentsList"
+              class="activitiesList"
           >
             <template #renderItem="{ item }">
               <a-list-item :key="item.id">
                 <a-list-item-meta>
                   <template #title>
                     <span>
-                      <a class="username">{{ item.user.name }}</a>&nbsp;
+                      <span class="username">{{ item.user.name }}</span>&nbsp;
                       <span class="event">
-                        <span>{{ item.template1 }}</span>&nbsp;
-                        <a href=""> {{ item?.group?.name }} </a>&nbsp;
-                        <span>{{ item.template2 }}</span>&nbsp;
-                        <a href=""> {{ item?.project?.name }} </a>
+                        <span>在</span>&nbsp;
+                        <a href="/post">{{ item.post_name }} </a>&nbsp;
+                        <span>评论</span>&nbsp;
+                        <a href="/post" bg-gray-1> {{ item.content }} </a>
                       </span>
                     </span>
                   </template>
                   <template #avatar>
-                    <a-avatar :src="item.user.avatar" />
+                    <a-avatar :src="item.user.avatar"/>
                   </template>
                   <template #description>
-                    <span class="datetime" :title="item.updatedAt">
-                      {{ item.updatedAt }}
+                    <span class="datetime" :title="item.createTime">
+                      {{ formatTimeAgo(item.createTime) }}
                     </span>
                   </template>
                 </a-list-item-meta>
@@ -402,38 +307,118 @@ onBeforeUnmount(() => {
       </a-col>
       <a-col :xl="8" :lg="24" :md="24" :sm="24" :xs="24">
         <a-card
-          :style="{ marginBottom: '24px' }"
-          title="快速开始 / 便捷导航"
-          :bordered="false"
-          :body-style="{ padding: 0 }"
+            :style="{ marginBottom: '24px' }"
+            title="最新通知"
+            :bordered="false"
+            :body-style="{ padding: 0 }"
         >
-          <EditableLinkGroup />
+          <template #extra>
+            <router-link to="/control/notice-crud-table">
+              通知管理
+            </router-link>
+          </template>
+          <a-list item-layout="horizontal" ma p30px>
+            <div ma text-16px font-bold w-full mb-20px>
+
+              <div>
+                <NotificationTwoTone/>&nbsp;
+                {{ noticeList?.title }}
+              </div>
+            </div>
+            <div style="white-space: pre-line;" ml-20px mr-20px>
+              {{ noticeList?.content }}
+            </div>
+            <a-divider mt-20px mb-20px/>
+            <div c-gray-4 ml-20px mb--10px>
+              {{ noticeList?.create_user }} 发布于
+              {{ noticeList?.createTime }}
+            </div>
+          </a-list>
         </a-card>
         <a-card
-          :style="{ marginBottom: '24px' }"
-          :bordered="false"
-          title="XX 指数"
+            :style="{ marginBottom: '24px' }"
+            title="快速开始 / 便捷导航"
+            :bordered="false"
+            :body-style="{ padding: 0 }"
         >
-          <div class="chart">
-            <div ref="radarContainer" />
-          </div>
+          <EditableLinkGroup/>
         </a-card>
         <a-card
-          :body-style="{ paddingTop: '12px', paddingBottom: '12px' }"
-          :bordered="false"
-          title="团队"
+            :style="{ marginBottom: '24px' }"
+            :bordered="false"
+            title="最新订单"
         >
-          <div class="members">
-            <a-row :gutter="48">
-              <a-col v-for="item in projectNotice" :key="`members-item-${item.id}`" :span="12">
-                <router-link :to="item.href">
-                  <a-avatar :src="item.logo" size="small" />
-                  <span class="member">{{ item.member }}</span>
-                </router-link>
+          <template #extra>
+            <router-link to="/control/order-crud-table">
+              订单管理
+            </router-link>
+          </template>
+          <div v-for="(order, index) in ordersList" :key="index">
+            <a-row>
+              <a-col :span="24">
+                <span c-gray-4 mr-10px>{{ order.createTime }}</span>
+                <span c-blue-6><a-avatar size="small" :src="order.user.avatar" mr-5px/>{{ order.name }}</span>
+                <span c-gray-4 mr-5px ml-5px>购买了</span>
+                <span v-for="(detail, index) in order.orderDetails" :key="index ">
+                      <a-image :src="detail.product.images" width="30px"/>
+                      <span ml-2 mt>{{ detail.product.title }}</span>
+                      <span ml-2 mt>× <a-tag ml-5px>{{ detail.quantity }}</a-tag></span>
+                      <span ml-4 mt c-red-5 font-550>￥{{ detail.price }}</span>
+                  <div h-1px w-full ma true-gray-2></div>
+                </span>
               </a-col>
+              <!--              <a-col :span="8">-->
+              <!--                <div>-->
+              <!--                  <p>-->
+              <!--                    收件人: {{ order.name }}-->
+              <!--                  </p>-->
+              <!--                  <p>-->
+              <!--                    收件号码: {{ order.phone }}-->
+              <!--                  </p>-->
+              <!--                  <p>-->
+              <!--                    收件地址: {{ order.address }}-->
+              <!--                  </p>-->
+              <!--                  <p>-->
+              <!--                    下单时间: {{ order.createTime }}-->
+              <!--                  </p>-->
+              <!--                </div>-->
+              <!--              </a-col>-->
+              <!--              <a-col :span="8">-->
+              <!--                <div>-->
+              <!--                  <p>-->
+              <!--                    订单状态: {{ order.status }}-->
+              <!--                  </p>-->
+              <!--                  <p>-->
+              <!--                    支付方式: {{ order.payMethod }}-->
+              <!--                  </p>-->
+              <!--                  <p>-->
+              <!--                    支付时间: {{ order.payTime }}-->
+              <!--                  </p>-->
+              <!--                  <p text-20px>-->
+              <!--                    订单金额：<span c-red-5 font-550>￥{{ order.totalPrice }}</span>-->
+              <!--                  </p>-->
+              <!--                </div>-->
+              <!--              </a-col>-->
             </a-row>
+            <a-divider/>
           </div>
         </a-card>
+        <!--        <a-card-->
+        <!--            :body-style="{ paddingTop: '12px', paddingBottom: '12px' }"-->
+        <!--            :bordered="false"-->
+        <!--            title="团队"-->
+        <!--        >-->
+        <!--          <div class="members">-->
+        <!--            <a-row :gutter="48">-->
+        <!--              <a-col v-for="item in projectNotice" :key="`members-item-${item.id}`" :span="12">-->
+        <!--                <router-link :to="item.href">-->
+        <!--                  <a-avatar :src="item.logo" size="small"/>-->
+        <!--                  <span class="member">{{ item.member }}</span>-->
+        <!--                </router-link>-->
+        <!--              </a-col>-->
+        <!--            </a-row>-->
+        <!--          </div>-->
+        <!--        </a-card>-->
       </a-col>
     </a-row>
   </page-container>
@@ -466,9 +451,11 @@ onBeforeUnmount(() => {
 
 .activitiesList {
   padding: 0 24px 8px 24px;
+
   .username {
     color: var(--text-color);
   }
+
   .event {
     font-weight: normal;
   }
@@ -476,8 +463,10 @@ onBeforeUnmount(() => {
 
 .pageHeaderContent {
   display: flex;
+
   .avatar {
     flex: 0 1 72px;
+
     & > span {
       display: block;
       width: 72px;
@@ -485,6 +474,7 @@ onBeforeUnmount(() => {
       border-radius: 72px;
     }
   }
+
   .content {
     position: relative;
     top: 4px;
@@ -492,9 +482,10 @@ onBeforeUnmount(() => {
     margin-left: 24px;
     color: var(--pro-ant-color-text-tertiary);
     line-height: 22px;
+
     .contentTitle {
       margin-bottom: 12px;
-      color:var(--pro-ant-color-text);
+      color: var(--pro-ant-color-text);
       font-weight: 500;
       font-size: 20px;
       line-height: 28px;
@@ -507,26 +498,31 @@ onBeforeUnmount(() => {
 
   float: right;
   white-space: nowrap;
+
   .statItem {
     position: relative;
     display: inline-block;
     padding: 0 32px;
+
     > p:first-child {
       margin-bottom: 4px;
       color: var(--pro-ant-color-text-tertiary);
       font-size: 14px;
       line-height: 22px;
     }
+
     > p {
       margin: 0;
-      color:var(--pro-ant-color-text);
+      color: var(--pro-ant-color-text);
       font-size: 30px;
       line-height: 38px;
+
       > span {
         color: var(--pro-ant-color-text-tertiary);
         font-size: 20px;
       }
     }
+
     &::after {
       position: absolute;
       top: 8px;
@@ -535,8 +531,10 @@ onBeforeUnmount(() => {
       height: 40px;
       content: '';
     }
+
     &:last-child {
       padding-right: 0;
+
       &::after {
         display: none;
       }
@@ -552,14 +550,74 @@ onBeforeUnmount(() => {
     color: var(--text-color);
     transition: all 0.3s;
     .textOverflow();
+
     .member {
       margin-left: 12px;
       font-size: 14px;
       line-height: 24px;
       vertical-align: top;
     }
+
     &:hover {
       color: #1890ff;
+    }
+  }
+}
+
+.productList {
+  :deep(.ant-card-meta-description) {
+    height: 88px;
+    overflow: hidden;
+    color: var(--pro-ant-color-text-tertiary);
+    line-height: 22px;
+  }
+
+  .cardTitle {
+    font-size: 0;
+
+    a {
+      display: inline-block;
+      height: 24px;
+      margin-left: 12px;
+      color: var(--pro-ant-color-text);
+      font-size: 14px;
+      line-height: 24px;
+      vertical-align: top;
+
+      &:hover {
+        color: var(--pro-ant-color-primary-hover);
+      }
+    }
+  }
+
+  .projectGrid {
+    width: 33.33%;
+  }
+
+  .projectItemContent {
+    display: flex;
+    height: 20px;
+    margin-top: 8px;
+    overflow: hidden;
+    font-size: 12px;
+    line-height: 20px;
+    .textOverflow();
+
+    a {
+      display: inline-block;
+      flex: 1 1 0;
+      color: var(--pro-ant-color-text-tertiary);
+      .textOverflow();
+
+      &:hover {
+        color: var(--pro-ant-color-primary-hover);
+      }
+    }
+
+    .datetime {
+      flex: 0 0 auto;
+      float: right;
+      color: var(--pro-ant-color-text-quaternary);
     }
   }
 }
@@ -571,24 +629,29 @@ onBeforeUnmount(() => {
     color: var(--pro-ant-color-text-tertiary);
     line-height: 22px;
   }
+
   .cardTitle {
     font-size: 0;
+
     a {
       display: inline-block;
       height: 24px;
       margin-left: 12px;
-      color:var(--pro-ant-color-text);
+      color: var(--pro-ant-color-text);
       font-size: 14px;
       line-height: 24px;
       vertical-align: top;
+
       &:hover {
         color: var(--pro-ant-color-primary-hover);
       }
     }
   }
+
   .projectGrid {
     width: 33.33%;
   }
+
   .projectItemContent {
     display: flex;
     height: 20px;
@@ -597,15 +660,18 @@ onBeforeUnmount(() => {
     font-size: 12px;
     line-height: 20px;
     .textOverflow();
+
     a {
       display: inline-block;
       flex: 1 1 0;
       color: var(--pro-ant-color-text-tertiary);
       .textOverflow();
+
       &:hover {
         color: var(--pro-ant-color-primary-hover);
       }
     }
+
     .datetime {
       flex: 0 0 auto;
       float: right;
@@ -622,11 +688,14 @@ onBeforeUnmount(() => {
   .activeCard {
     margin-bottom: 24px;
   }
+
   .members {
     margin-bottom: 0;
   }
+
   .extraContent {
     margin-left: -44px;
+
     .statItem {
       padding: 0 16px;
     }
@@ -637,15 +706,19 @@ onBeforeUnmount(() => {
   .activeCard {
     margin-bottom: 24px;
   }
+
   .members {
     margin-bottom: 0;
   }
+
   .extraContent {
     float: none;
     margin-right: 0;
+
     .statItem {
       padding: 0 16px;
       text-align: left;
+
       &::after {
         display: none;
       }
@@ -657,6 +730,7 @@ onBeforeUnmount(() => {
   .extraContent {
     margin-left: -16px;
   }
+
   .projectList {
     .projectGrid {
       width: 50%;
@@ -667,10 +741,12 @@ onBeforeUnmount(() => {
 @media screen and (max-width: 576px) {
   .pageHeaderContent {
     display: block;
+
     .content {
       margin-left: 0;
     }
   }
+
   .extraContent {
     .statItem {
       float: none;

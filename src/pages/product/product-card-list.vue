@@ -11,7 +11,6 @@ import {
 } from "@ant-design/icons-vue";
 import ProductOrderModal from "~/pages/product/components/product-order-modal.vue";
 import ProductPayModal from "~/pages/product/components/product-pay-modal.vue";
-import ProductSucessModal from "~/pages/product/components/product-success-modal.vue";
 import ProductSuccessModal from "~/pages/product/components/product-success-modal.vue";
 
 async function getData() {

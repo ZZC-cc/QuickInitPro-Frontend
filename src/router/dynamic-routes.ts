@@ -7,7 +7,7 @@ export default [
     {
         path: "/home",
         name: "Home",
-        component: () => import("~/pages/home/analysis/index.vue"),
+        component: () => import("~/pages/home/workplace/index.vue"),
         meta: {
             title: "首页",
             icon: "HomeOutlined",
@@ -87,7 +87,7 @@ export default [
                 },
             },
             {
-                path: "/order/order-crud-table",
+                path: "/control/order-crud-table",
                 name: "OrderTable",
                 component: () => import("~/pages/control/order/order-crud-table.vue"),
                 meta: {
