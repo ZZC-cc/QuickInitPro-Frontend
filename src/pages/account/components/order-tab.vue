@@ -83,7 +83,7 @@ function handlePageChange(page: number) {
                   <span class="ml-4 mt" style="color: #ff4000;font-weight: 550">￥{{ detail.price }}</span>
                 </a-col>
               </a-row>
-              <div style="background-color: rgba(213,212,212,0.13);height: 1px;width: 100%;margin: 10px auto;"></div>
+              <div style="height: 1px;width: 100%;margin: 10px auto;" true-gray-2></div>
             </div>
           </a-col>
           <a-col :span="8">
@@ -113,7 +113,7 @@ function handlePageChange(page: number) {
               <p>
                 支付时间: {{ order.payTime }}
               </p>
-              <p class="text-20px">
+              <p text-20px>
                 订单金额：<span color="#ff4000" style="font-weight: 550;">￥{{ order.totalPrice }}</span>
               </p>
             </div>
