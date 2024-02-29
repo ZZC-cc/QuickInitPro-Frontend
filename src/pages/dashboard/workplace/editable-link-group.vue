@@ -42,6 +42,10 @@ const links = [
     title: '个人设置',
     href: '/account/settings',
   },
+  {
+    title: '接口文档',
+    href: '/link/doc',
+  },
 ]
 </script>
 
@@ -66,7 +70,7 @@ const links = [
     font-size: 14px;
 
     &:hover {
-      color: #0088ff;
+      color: #6000fb;
     }
   }
 }

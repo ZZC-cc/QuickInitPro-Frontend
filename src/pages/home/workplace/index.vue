@@ -167,7 +167,7 @@ const formatTimeAgo = (timeString: string) => {
           <a-statistic title="订单总金额" :value="HomeData?.orderTotalPrice" suffix="元"/>
         </div>
         <div class="statItem">
-          <a-statistic title="项目访问" :value="HomeData?.visitCount" suffix="次"/>
+          <a-statistic title="网站访问" :value="HomeData?.visitCount" suffix="次"/>
         </div>
       </div>
     </template>
@@ -195,9 +195,9 @@ const formatTimeAgo = (timeString: string) => {
               >
                 <template #title>
                   <div class="cardTitle" ml--10px>
-                    <router-link to="/post">
+                    <a :href="/postShow/+item.id">
                       {{ item.title }}
-                    </router-link>
+                    </a>
                   </div>
                 </template>
               </a-card-meta>
@@ -285,9 +285,9 @@ const formatTimeAgo = (timeString: string) => {
                       <span class="username">{{ item.user.name }}</span>&nbsp;
                       <span class="event">
                         <span>在</span>&nbsp;
-                        <a href="/post">{{ item.post_name }} </a>&nbsp;
+                        <a :href="/postShow/+item.post_id">{{ item.post_name }} </a>&nbsp;
                         <span>评论</span>&nbsp;
-                        <a href="/post" bg-gray-1> {{ item.content }} </a>
+                        <a :href="/postShow/+item.post_id" bg-gray-1> {{ item.content }} </a>
                       </span>
                     </span>
                   </template>
