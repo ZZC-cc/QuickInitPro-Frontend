@@ -353,8 +353,8 @@ const formatTimeAgo = (timeString: string) => {
               订单管理
             </router-link>
           </template>
-          <div v-for="(order, index) in ordersList" :key="index">
-            <a-row>
+          <div v-for="(order, index) in ordersList" :key="index" mb-15px>
+            <a-row mt-10px>
               <a-col :span="24">
                 <span c-gray-4 mr-10px>{{ order.createTime }}</span>
                 <span c-blue-6><a-avatar size="small" :src="order.user.avatar" mr-5px/>{{ order.name }}</span>
@@ -400,7 +400,7 @@ const formatTimeAgo = (timeString: string) => {
               <!--                </div>-->
               <!--              </a-col>-->
             </a-row>
-            <a-divider/>
+            <a-divider v-if="index !== ordersList.length - 1"/>
           </div>
         </a-card>
         <!--        <a-card-->
