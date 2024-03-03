@@ -1,7 +1,5 @@
 <h1>QuickInit Pro - Frontend</h1>
 
-</div>
-
 ## 介绍
 
 QuickInit

@@ -356,10 +356,15 @@ const formatTimeAgo = (timeString: string) => {
           <div v-for="(order, index) in ordersList" :key="index" mb-15px>
             <a-row mt-10px>
               <a-col :span="24">
-                <span c-gray-4 mr-10px>{{ order.createTime }}</span>
                 <span c-blue-6><a-avatar size="small" :src="order.user.avatar" mr-5px/>{{ order.name }}</span>
+                <span c-gray-4 ml-10px>{{ order.createTime }}</span>
+
                 <span c-gray-4 mr-5px ml-5px>购买了</span>
-                <span v-for="(detail, index) in order.orderDetails" :key="index ">
+              </a-col>
+            </a-row>
+            <a-row mt-10px>
+              <a-col :span="24">
+                                <span v-for="(detail, index) in order.orderDetails" :key="index ">
                       <a-image :src="detail.product.images" width="30px"/>
                       <span ml-2 mt>{{ detail.product.title }}</span>
                       <span ml-2 mt>× <a-tag ml-5px>{{ detail.quantity }}</a-tag></span>
@@ -367,38 +372,6 @@ const formatTimeAgo = (timeString: string) => {
                   <div h-1px w-full ma true-gray-2></div>
                 </span>
               </a-col>
-              <!--              <a-col :span="8">-->
-              <!--                <div>-->
-              <!--                  <p>-->
-              <!--                    收件人: {{ order.name }}-->
-              <!--                  </p>-->
-              <!--                  <p>-->
-              <!--                    收件号码: {{ order.phone }}-->
-              <!--                  </p>-->
-              <!--                  <p>-->
-              <!--                    收件地址: {{ order.address }}-->
-              <!--                  </p>-->
-              <!--                  <p>-->
-              <!--                    下单时间: {{ order.createTime }}-->
-              <!--                  </p>-->
-              <!--                </div>-->
-              <!--              </a-col>-->
-              <!--              <a-col :span="8">-->
-              <!--                <div>-->
-              <!--                  <p>-->
-              <!--                    订单状态: {{ order.status }}-->
-              <!--                  </p>-->
-              <!--                  <p>-->
-              <!--                    支付方式: {{ order.payMethod }}-->
-              <!--                  </p>-->
-              <!--                  <p>-->
-              <!--                    支付时间: {{ order.payTime }}-->
-              <!--                  </p>-->
-              <!--                  <p text-20px>-->
-              <!--                    订单金额：<span c-red-5 font-550>￥{{ order.totalPrice }}</span>-->
-              <!--                  </p>-->
-              <!--                </div>-->
-              <!--              </a-col>-->
             </a-row>
             <a-divider v-if="index !== ordersList.length - 1"/>
           </div>

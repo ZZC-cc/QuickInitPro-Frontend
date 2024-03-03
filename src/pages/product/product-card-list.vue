@@ -136,11 +136,7 @@ function hiddenSuccess() {
         <a-col
             v-for="(item, index) in data"
             :key="index"
-            :xs="16"
-            :sm="8"
-            :md="6"
-            :lg="6"
-            :xl="6"
+            :span="8"
             class="mb-4"
         >
           <a-card
