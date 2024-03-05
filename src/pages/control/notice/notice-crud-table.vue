@@ -258,7 +258,7 @@ async function cleanQuery() {
       </a-table>
     </a-card>
 
-    <NoticeTableModal ref="noticeTableModal"/>
+    <NoticeTableModal ref="noticeTableModal" @ok="getNoticeData"/>
   </page-container>
 </template>
 

@@ -13,7 +13,7 @@ import {
   getUsersBySearchTextUsingGet,
 } from "~/servers/api/userController.ts";
 import User = API.User;
-import { message } from "ant-design-vue";
+import {message} from "ant-design-vue";
 
 const columns = shallowRef([
   {
@@ -129,7 +129,7 @@ async function handleEdit(record: User) {
 const searchText = ref("");
 
 async function initQuery(searchText: string) {
-  const res = await getUsersBySearchTextUsingGet({ searchText: searchText });
+  const res = await getUsersBySearchTextUsingGet({searchText: searchText});
   if (res.code === 200) {
     state.dataSource = res.data || [];
   }
@@ -152,13 +152,13 @@ async function cleanQuery() {
             <a-space size="middle">
               <a-button type="primary" @click="reload" ghost>
                 <template #icon>
-                  <ReloadOutlined />
+                  <ReloadOutlined/>
                 </template>
                 刷新
               </a-button>
               <a-button type="primary" @click="handleAdd">
                 <template #icon>
-                  <PlusOutlined />
+                  <PlusOutlined/>
                 </template>
                 新增
               </a-button>
@@ -167,11 +167,11 @@ async function cleanQuery() {
           <a-col :span="6">
             <a-space style="float: right">
               <a-input-search
-                v-model:value="searchText"
-                placeholder="请输入搜索内容"
-                enter-button="查询"
-                style="width: 250px"
-                @search="initQuery(searchText)"
+                  v-model:value="searchText"
+                  placeholder="请输入搜索内容"
+                  enter-button="查询"
+                  style="width: 250px"
+                  @search="initQuery(searchText)"
               />
               <a-button @click="cleanQuery"> 重置</a-button>
             </a-space>
@@ -182,55 +182,55 @@ async function cleanQuery() {
 
     <a-card>
       <a-table
-        row-key="id"
-        :loading="state.loading"
-        :columns="columns"
-        :data-source="state.dataSource"
-        :pagination="state.pagination"
+          row-key="id"
+          :loading="state.loading"
+          :columns="columns"
+          :data-source="state.dataSource"
+          :pagination="state.pagination"
       >
         <template #bodyCell="scope">
           <template v-if="scope?.column?.dataIndex === 'avatar'">
             <a-avatar
-              v-if="scope?.record?.avatar"
-              :src="scope?.record?.avatar"
-              style="width: 50px; height: 50px; border-radius: 50%"
+                v-if="scope?.record?.avatar"
+                :src="scope?.record?.avatar"
+                style="width: 50px; height: 50px; border-radius: 50%"
             />
             <a-avatar
-              v-else
-              :size="50"
-              style="
+                v-else
+                :size="50"
+                style="
                 width: 50px;
                 height: 50px;
                 border-radius: 50%;
                 background-color: #a6dbff;
               "
-              >{{ scope?.record?.name }}
+            >{{ scope?.record?.name }}
             </a-avatar>
           </template>
           <template v-if="scope?.column?.dataIndex === 'sex'">
             <ManOutlined
-              v-if="scope?.record?.sex == '男'"
-              style="color: #2eabff"
+                v-if="scope?.record?.sex == '男'"
+                style="color: #2eabff"
             />
             <WomanOutlined
-              v-if="scope?.record?.sex == '女'"
-              style="color: #ff2ef8"
+                v-if="scope?.record?.sex == '女'"
+                style="color: #ff2ef8"
             />
             <EyeInvisibleOutlined
-              v-if="scope?.record?.sex == '保密'"
-              style="color: #343434"
+                v-if="scope?.record?.sex == '保密'"
+                style="color: #343434"
             />
           </template>
           <template v-if="scope?.column?.dataIndex === 'status'">
             <span
-              v-if="scope?.record?.status == 1"
-              style="color: #01c855; font-weight: 600"
-              >正常</span
+                v-if="scope?.record?.status == 1"
+                style="color: #01c855; font-weight: 600"
+            >正常</span
             >
             <span
-              v-if="scope?.record?.status == 0"
-              style="color: #d2004d; font-weight: 600"
-              >禁用</span
+                v-if="scope?.record?.status == 0"
+                style="color: #d2004d; font-weight: 600"
+            >禁用</span
             >
           </template>
           <template v-if="scope?.column?.dataIndex === 'role'">
@@ -247,10 +247,10 @@ async function cleanQuery() {
                 编辑
               </a-button>
               <a-popconfirm
-                title="确定删除该条数据？"
-                ok-text="确定"
-                cancel-text="取消"
-                @confirm="handleDelete(scope?.record as User)"
+                  title="确定删除该条数据？"
+                  ok-text="确定"
+                  cancel-text="取消"
+                  @confirm="handleDelete(scope?.record as User)"
               >
                 <a-button type="link" style="color: red"> 删除</a-button>
               </a-popconfirm>
@@ -260,7 +260,7 @@ async function cleanQuery() {
       </a-table>
     </a-card>
 
-    <CrudTableModal ref="crudTableModal" />
+    <CrudTableModal ref="crudTableModal" @ok="getUserData"/>
   </page-container>
 </template>
 

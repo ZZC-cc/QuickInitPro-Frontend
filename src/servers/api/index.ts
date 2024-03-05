@@ -10,6 +10,7 @@ import * as noticeController from './noticeController';
 import * as orderController from './orderController';
 import * as postController from './postController';
 import * as productController from './productController';
+import * as taskController from './taskController';
 import * as userController from './userController';
 
 export default {
@@ -21,5 +22,6 @@ export default {
     orderController,
     postController,
     productController,
+    taskController,
     userController,
 };

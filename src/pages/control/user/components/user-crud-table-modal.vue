@@ -57,7 +57,6 @@ async function handleOk() {
       setTimeout(() => {
         // 重置表单
         formRef.value?.resetFields();
-        router.replace(`/redirect/%2Fcontrol%2Fuser-crud-table`);
       }, 1000);
     } else {
       message.error(responseData.message);

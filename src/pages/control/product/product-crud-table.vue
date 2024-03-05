@@ -253,7 +253,7 @@ async function changeShelvesStatus(id: any) {
       </a-table>
     </a-card>
 
-    <CrudTableModal ref="crudTableModal"/>
+    <CrudTableModal ref="crudTableModal" @ok="getData"/>
   </page-container>
 </template>
 

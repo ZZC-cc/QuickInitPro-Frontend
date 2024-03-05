@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import type { FormInstance } from "ant-design-vue";
-import { cloneDeep } from "lodash";
-import { message } from "ant-design-vue";
+import type {FormInstance} from "ant-design-vue";
+import {cloneDeep} from "lodash";
+import {message} from "ant-design-vue";
 import router from "~/router";
 import Notice = API.Notice;
 import {
@@ -9,7 +9,7 @@ import {
   updateUsingPost,
 } from "~/servers/api/noticeController.ts";
 
-const { name } = useUserStore();
+const {name} = useUserStore();
 
 const emit = defineEmits(["cancel", "ok"]);
 const isUpdate = ref(false);
@@ -24,8 +24,8 @@ const formRef = ref<FormInstance>();
 
 const formData = ref(<Notice>{});
 
-const labelCol = { style: { width: "100px" } };
-const wrapperCol = { span: 24 };
+const labelCol = {style: {width: "100px"}};
+const wrapperCol = {span: 24};
 
 function open(record?: Notice) {
   visible.value = true;
@@ -71,7 +71,6 @@ async function handleOk() {
       setTimeout(() => {
         // 重置表单
         formRef.value?.resetFields();
-        router.replace(`/redirect/%2Fcontrol%2Fnotice-crud-table`);
       }, 1000);
     } else {
       message.error(responseData.message);
@@ -93,35 +92,35 @@ defineExpose({
 
 <template>
   <a-modal
-    v-model:open="visible"
-    :title="title"
-    @ok="handleOk"
-    @cancel="handleCancel"
-    width="700px"
+      v-model:open="visible"
+      :title="title"
+      @ok="handleOk"
+      @cancel="handleCancel"
+      width="700px"
   >
     <a-form
-      ref="formRef"
-      :model="formData"
-      class="w-full"
-      :label-col="labelCol"
-      :wrapper-col="wrapperCol"
+        ref="formRef"
+        :model="formData"
+        class="w-full"
+        :label-col="labelCol"
+        :wrapper-col="wrapperCol"
     >
       <a-form-item
-        name="title"
-        label="公告标题"
-        :rules="[{ required: true, message: '请输入公告标题' }]"
+          name="title"
+          label="公告标题"
+          :rules="[{ required: true, message: '请输入公告标题' }]"
       >
         <a-input
-          v-model:value="formData.title"
-          :maxlength="50"
-          :show-count="true"
-          placeholder="请输入公告"
+            v-model:value="formData.title"
+            :maxlength="50"
+            :show-count="true"
+            placeholder="请输入公告"
         />
       </a-form-item>
       <a-form-item
-        name="status"
-        label="公告状态"
-        :rules="[{ required: true, message: '请输入公告状态' }]"
+          name="status"
+          label="公告状态"
+          :rules="[{ required: true, message: '请输入公告状态' }]"
       >
         <a-radio-group v-model:value="formData.status">
           <a-radio :value="1">启用</a-radio>
@@ -129,48 +128,48 @@ defineExpose({
         </a-radio-group>
       </a-form-item>
       <a-form-item
-        name="sort"
-        label="排序"
-        :rules="[{ required: true, message: '请输入排序' }]"
+          name="sort"
+          label="排序"
+          :rules="[{ required: true, message: '请输入排序' }]"
       >
         <a-input-number
-          v-model:value="formData.sort"
-          :min="1"
-          :max="999"
-          placeholder="请输入排序"
+            v-model:value="formData.sort"
+            :min="1"
+            :max="999"
+            placeholder="请输入排序"
         />
       </a-form-item>
       <a-form-item
-        name="start_time"
-        label="起始时间"
-        :rules="[{ required: true, message: '请输入起始时间' }]"
+          name="start_time"
+          label="起始时间"
+          :rules="[{ required: true, message: '请输入起始时间' }]"
       >
         <a-date-picker
-          v-model:value="formData.start_time"
-          :show-time="true"
-          format="YYYY-MM-DD HH:mm:ss"
-          value-format="YYYY-MM-DD HH:mm:ss"
+            v-model:value="formData.start_time"
+            :show-time="true"
+            format="YYYY-MM-DD HH:mm:ss"
+            value-format="YYYY-MM-DD HH:mm:ss"
         />
         至
         <a-date-picker
-          v-model:value="formData.end_time"
-          :show-time="true"
-          format="YYYY-MM-DD HH:mm:ss"
-          value-format="YYYY-MM-DD HH:mm:ss"
+            v-model:value="formData.end_time"
+            :show-time="true"
+            format="YYYY-MM-DD HH:mm:ss"
+            value-format="YYYY-MM-DD HH:mm:ss"
         />
       </a-form-item>
       <a-form-item
-        name="content"
-        label="公告内容"
-        :rules="[{ required: true, message: '请输入公告内容' }]"
+          name="content"
+          label="公告内容"
+          :rules="[{ required: true, message: '请输入公告内容' }]"
       >
         <a-textarea
-          v-model:value="formData.content"
-          :maxlength="500"
-          height="200px"
-          :rows="4"
-          :show-count="true"
-          placeholder="请输入公告内容"
+            v-model:value="formData.content"
+            :maxlength="500"
+            height="200px"
+            :rows="4"
+            :show-count="true"
+            placeholder="请输入公告内容"
         />
       </a-form-item>
     </a-form>

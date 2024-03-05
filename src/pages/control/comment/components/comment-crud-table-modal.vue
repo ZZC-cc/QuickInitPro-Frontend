@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-import type { FormInstance } from "ant-design-vue";
-import { cloneDeep } from "lodash";
+import type {FormInstance} from "ant-design-vue";
+import {cloneDeep} from "lodash";
 import {
   updateUserByAdminUsingPut,
   userCreateUsingPost,
 } from "~/servers/api/userController.ts";
-import { message } from "ant-design-vue";
+import {message} from "ant-design-vue";
 import User = API.User;
 import router from "~/router";
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons-vue";
-import { uploadFileUsingPost } from "~/servers/api/fileController.ts";
+import {PlusOutlined, UploadOutlined} from "@ant-design/icons-vue";
+import {uploadFileUsingPost} from "~/servers/api/fileController.ts";
 import Post = API.Post;
 import PostVO = API.PostVO;
 import {
@@ -36,8 +36,8 @@ const formData = ref(<PostVO>{
   tagList: [],
 });
 
-const labelCol = { style: { width: "100px" } };
-const wrapperCol = { span: 24 };
+const labelCol = {style: {width: "100px"}};
+const wrapperCol = {span: 24};
 
 function open(record?: PostVO) {
   visible.value = true;
@@ -76,7 +76,6 @@ async function handleOk() {
     setTimeout(() => {
       // 重置表单
       formRef.value?.resetFields();
-      router.replace(`/redirect/%2Fcontrol%2Fpost-crud-table`);
     }, 1000);
   } catch (errorInfo) {
     console.log("Form Validate Failed:", errorInfo);
@@ -95,7 +94,7 @@ defineExpose({
 
 function handleTagClose(tag: string) {
   formData.value.tagList = formData.value.tagList.filter(
-    (t: string) => t !== tag
+      (t: string) => t !== tag
   );
 }
 
@@ -114,75 +113,75 @@ const showTagInput = ref(false);
 
 <template>
   <a-modal
-    v-model:open="visible"
-    :title="title"
-    @ok="handleOk"
-    @cancel="handleCancel"
-    :width="800"
+      v-model:open="visible"
+      :title="title"
+      @ok="handleOk"
+      @cancel="handleCancel"
+      :width="800"
   >
     <a-form
-      ref="formRef"
-      :model="formData"
-      class="w-full"
-      :label-col="labelCol"
-      :wrapper-col="wrapperCol"
+        ref="formRef"
+        :model="formData"
+        class="w-full"
+        :label-col="labelCol"
+        :wrapper-col="wrapperCol"
     >
       <a-form-item
-        name="title"
-        label="标题"
-        :rules="[{ required: true, message: '请输入文章标题' }]"
+          name="title"
+          label="标题"
+          :rules="[{ required: true, message: '请输入文章标题' }]"
       >
-        <a-input v-model:value="formData.title" />
+        <a-input v-model:value="formData.title"/>
       </a-form-item>
       <!-- 标签编辑部分 -->
       <a-form-item name="tagList" label="标签" v-model:value="formData.tagList">
         <div class="mt-2">
           <template v-if="showTagInput">
             <a-tag
-              v-for="(tag, index) in formData.tagList"
-              :key="index"
-              :closable="true"
-              @close="handleTagClose(tag)"
+                v-for="(tag, index) in formData.tagList"
+                :key="index"
+                :closable="true"
+                @close="handleTagClose(tag)"
             >
               {{ tag }}
             </a-tag>
             <a-input
-              v-model:value="tagInputValue"
-              @keyup.enter="handleTagInputConfirm"
-              @blur="
+                v-model:value="tagInputValue"
+                @keyup.enter="handleTagInputConfirm"
+                @blur="
                 showTagInput = false;
                 handleTagInputConfirm();
               "
-              type="text"
-              size="small"
-              :style="{ width: '78px' }"
+                type="text"
+                size="small"
+                :style="{ width: '78px' }"
             />
           </template>
           <template v-else>
             <a-tag
-              v-for="(tag, index) in formData.tagList"
-              :key="index"
-              :closable="true"
-              @close="handleTagClose(tag)"
+                v-for="(tag, index) in formData.tagList"
+                :key="index"
+                :closable="true"
+                @close="handleTagClose(tag)"
             >
               {{ tag }}
             </a-tag>
             <a-tag @click="showTagInput = true">
-              <PlusOutlined />
+              <PlusOutlined/>
             </a-tag>
           </template>
         </div>
       </a-form-item>
       <!-- 标签编辑部分结束 -->
       <a-form-item
-        name="content"
-        label="内容"
-        :rules="[{ required: true, message: '请输入文章内容' }]"
+          name="content"
+          label="内容"
+          :rules="[{ required: true, message: '请输入文章内容' }]"
       >
         <a-textarea
-          v-model:value="formData.content"
-          style="height: 500px"
-          show-count
+            v-model:value="formData.content"
+            style="height: 500px"
+            show-count
         />
       </a-form-item>
     </a-form>

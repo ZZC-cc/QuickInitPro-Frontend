@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ReloadOutlined } from "@ant-design/icons-vue";
-import { message } from "ant-design-vue";
-import { searchPostBySearchTextUsingGet } from "~/servers/api/postController.ts";
+import {ReloadOutlined} from "@ant-design/icons-vue";
+import {message} from "ant-design-vue";
+import {searchPostBySearchTextUsingGet} from "~/servers/api/postController.ts";
 import PostVO = API.PostVO;
 import {
   deleteCommentUsingPost,
@@ -91,7 +91,7 @@ const handleEdit = (postId: any) => {
 const searchText = ref("");
 
 async function initQuery(searchText: string) {
-  const res = await getCommentBySearchTextUsingGet({ searchText: searchText });
+  const res = await getCommentBySearchTextUsingGet({searchText: searchText});
   if (res.code === 200) {
     state.dataSource = res.data || [];
     message.success("查询成功");
@@ -118,7 +118,7 @@ const showCommentModel = ref(false);
             <a-space size="middle">
               <a-button type="primary" @click="reload" ghost>
                 <template #icon>
-                  <ReloadOutlined />
+                  <ReloadOutlined/>
                 </template>
                 刷新
               </a-button>
@@ -127,11 +127,11 @@ const showCommentModel = ref(false);
           <a-col :span="6">
             <a-space style="float: right">
               <a-input-search
-                v-model:value="searchText"
-                placeholder="请输入搜索内容"
-                enter-button="查询"
-                style="width: 250px"
-                @search="initQuery(searchText)"
+                  v-model:value="searchText"
+                  placeholder="请输入搜索内容"
+                  enter-button="查询"
+                  style="width: 250px"
+                  @search="initQuery(searchText)"
               />
               <a-button @click="cleanQuery"> 重置</a-button>
             </a-space>
@@ -142,15 +142,15 @@ const showCommentModel = ref(false);
 
     <a-card>
       <a-table
-        row-key="id"
-        :loading="state.loading"
-        :columns="columns"
-        :data-source="state.dataSource"
-        :pagination="state.pagination"
+          row-key="id"
+          :loading="state.loading"
+          :columns="columns"
+          :data-source="state.dataSource"
+          :pagination="state.pagination"
       >
         <template #bodyCell="scope">
           <template v-if="scope?.column?.dataIndex === 'user'">
-            <a-avatar :src="scope?.record?.user.avatar" />
+            <a-avatar :src="scope?.record?.user.avatar"/>
             <span>&nbsp;&nbsp;{{ scope?.record?.user.name }}</span>
           </template>
           <template v-if="scope?.column?.dataIndex === 'content'">
@@ -165,8 +165,8 @@ const showCommentModel = ref(false);
                 回复
               </a-button>
               <a-popconfirm
-                title="确定删除吗？"
-                @confirm="deleteComment(scope?.record.id)"
+                  title="确定删除吗？"
+                  @confirm="deleteComment(scope?.record.id)"
               >
                 <a-button type="link" style="color: red">删除</a-button>
               </a-popconfirm>
@@ -176,19 +176,19 @@ const showCommentModel = ref(false);
       </a-table>
     </a-card>
     <a-modal
-      v-model:visible="showCommentModel"
-      style="width: 800px"
-      @ok="
+        v-model:visible="showCommentModel"
+        style="width: 800px"
+        @ok="
         getData();
         showCommentModel = !showCommentModel;
       "
-      @cancel="
+        @cancel="
         getData();
         showCommentModel = false;
       "
-      @close="showCommentModel = false"
+        @close="showCommentModel = false"
     >
-      <CommentModel :post-id="selectedPostId" style="padding: 0 30px" />
+      <CommentModel :post-id="selectedPostId" style="padding: 0 30px" @ok="getData"/>
     </a-modal>
   </page-container>
 </template>

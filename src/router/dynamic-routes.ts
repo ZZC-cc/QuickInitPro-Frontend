@@ -78,6 +78,15 @@ export default [
                 },
             },
             {
+                path: "/control/task-crud-table",
+                name: "TaskTable",
+                component: () => import("~/pages/control/task/task-crud-table.vue"),
+                meta: {
+                    title: "任务管理",
+                    icon: "FieldTimeOutlined",
+                },
+            },
+            {
                 path: "/control/product-crud-table",
                 name: "ProductTable",
                 component: () => import("~/pages/control/product/product-crud-table.vue"),

@@ -39,6 +39,11 @@ declare namespace API {
     data?: string[];
     message?: string;
   };
+  type BaseResponseListTaskVO = {
+    code?: number;
+    data?: TaskVO[];
+    message?: string;
+  };
   type BaseResponseListUser = {
     code?: number;
     data?: User[];
@@ -443,6 +448,42 @@ declare namespace API {
   type searchUsingPOSTParams = {
     /** searchText */
     searchText?: string;
+  };
+  type TaskAddRequest = {
+    linkId?: number;
+    principalId?: number;
+    priority?: string;
+    startTime?: string;
+    status?: string;
+    taskName?: string;
+    userId?: number;
+  };
+  type TaskUpdateRequest = {
+    id?: number;
+    linkId?: number;
+    principalId?: number;
+    priority?: string;
+    progress?: number;
+    status?: string;
+    taskName?: string;
+    userId?: number;
+  };
+  type TaskVO = {
+    createTime?: string;
+    endTime?: string;
+    id?: number;
+    linkId?: number;
+    post?: PostVO;
+    principal?: UserVO;
+    principalId?: number;
+    priority?: string;
+    progress?: number;
+    startTime?: string;
+    status?: string;
+    taskName?: string;
+    updateTime?: string;
+    user?: UserVO;
+    userId?: number;
   };
   type UpdateByAdminRequest = {
     /** 家庭住址 */

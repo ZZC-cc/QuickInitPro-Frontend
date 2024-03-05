@@ -76,7 +76,6 @@ async function handleOk() {
     setTimeout(() => {
       // 重置表单
       formRef.value?.resetFields();
-      router.replace(`/redirect/%2Fcontrol%2Fpost-crud-table`);
     }, 1000);
   } catch (errorInfo) {
     console.log("Form Validate Failed:", errorInfo);
