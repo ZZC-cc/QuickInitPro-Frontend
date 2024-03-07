@@ -4,17 +4,15 @@ import { DeleteOutlined, MessageOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import CommentAddModel from "~/pages/post/components/comment-add-model.vue";
 import { deleteCommentUsingPost } from "~/servers/api/commentController.ts";
-</script>
 
-<script lang="ts">
+const emits = defineEmits(["commentAdded"]);
+
 import CommentVO = API.CommentVO;
 
 const showReply = ref(false);
 const replyToId = ref("");
 const postId = ref("");
 const { username } = useUserStore();
-
-const emits = defineEmits(["commentAdded"]);
 
 function showReplyForm(id: any) {
   showReply.value = !showReply.value;
@@ -45,7 +43,9 @@ async function deleteComment(id: any) {
     console.error("删除错误:", error);
   }
 }
+</script>
 
+<script lang="ts">
 export default {
   props: {
     comments: {
@@ -66,11 +66,13 @@ export default {
             <MessageOutlined />&nbsp;
             <a @click="showReplyForm(comment.id)">回复</a>&nbsp;&nbsp;
           </span>
-          <span v-if="comment.user?.username == username">
+          <span v-if="comment.user?.username === username">
             <a-popconfirm
               title="确定删除吗？"
               @confirm="deleteComment(comment.id)"
-              ><DeleteOutlined />&nbsp;<a style="color: red">删除</a>
+            >
+              <DeleteOutlined />&nbsp;
+              <a style="color: red">删除</a>
             </a-popconfirm>
           </span>
         </span>

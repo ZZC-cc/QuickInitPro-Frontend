@@ -6,134 +6,130 @@ import {
   TaobaoCircleFilled,
   UserOutlined,
   WeiboCircleFilled,
-} from '@ant-design/icons-vue'
-import {delayTimer} from '@v-c/utils'
-import {AxiosError} from 'axios'
-import {message, notification} from 'ant-design-vue'
-import {getQueryParam} from '~/utils/tools'
-import type {LoginMobileParams, LoginParams} from '~@/api/common/login'
-import pageBubble from '@/utils/page-bubble'
-import {userLoginUsingPost} from '~/servers/api/userController.ts'
+} from "@ant-design/icons-vue";
+import { delayTimer } from "@v-c/utils";
+import { AxiosError } from "axios";
+import { message, notification } from "ant-design-vue";
+import { getQueryParam } from "~/utils/tools";
+import type { LoginMobileParams, LoginParams } from "~@/api/common/login";
+import pageBubble from "@/utils/page-bubble";
+import { userLoginUsingPost } from "~/servers/api/userController.ts";
 
-const message = useMessage()
-const notification = useNotification()
-const appStore = useAppStore()
-const {layoutSetting} = storeToRefs(appStore)
-const router = useRouter()
+const message = useMessage();
+const notification = useNotification();
+const appStore = useAppStore();
+const { layoutSetting } = storeToRefs(appStore);
+const router = useRouter();
 const loginModel = reactive({
   username: undefined,
   password: undefined,
   mobile: undefined,
   code: undefined,
-  type: 'account',
+  type: "account",
   remember: true,
-})
-const {t} = useI18nLocale()
-const formRef = shallowRef()
-const codeLoading = shallowRef(false)
-const resetCounter = 60
-const submitLoading = shallowRef(false)
-const errorAlert = shallowRef(false)
-const bubbleCanvas = ref<HTMLCanvasElement>()
-const {counter, pause, reset, resume, isActive} = useInterval(1000, {
+});
+const { t } = useI18nLocale();
+const formRef = shallowRef();
+const codeLoading = shallowRef(false);
+const resetCounter = 60;
+const submitLoading = shallowRef(false);
+const errorAlert = shallowRef(false);
+const bubbleCanvas = ref<HTMLCanvasElement>();
+const { counter, pause, reset, resume, isActive } = useInterval(1000, {
   controls: true,
   immediate: false,
   callback(count) {
     if (count) {
-      if (count === resetCounter)
-        pause()
+      if (count === resetCounter) pause();
     }
   },
-})
+});
 
 async function getCode() {
-  codeLoading.value = true
+  codeLoading.value = true;
   try {
-    await formRef.value.validate(['mobile'])
+    await formRef.value.validate(["mobile"]);
     setTimeout(() => {
-      reset()
-      resume()
-      codeLoading.value = false
-      message.success('验证码是：123456')
-    }, 3000)
+      reset();
+      resume();
+      codeLoading.value = false;
+      message.success("验证码是：123456");
+    }, 3000);
   } catch (error) {
-    codeLoading.value = false
+    codeLoading.value = false;
   }
 }
 
 async function submit() {
-  submitLoading.value = true
+  submitLoading.value = true;
   try {
-    await formRef.value?.validate()
-    let params: LoginParams | LoginMobileParams
+    await formRef.value?.validate();
+    let params: LoginParams | LoginMobileParams;
 
-    if (loginModel.type === 'account') {
+    if (loginModel.type === "account") {
       params = {
         username: loginModel.username,
         password: loginModel.password,
-      } as unknown as LoginParams
+      } as unknown as LoginParams;
     } else {
       params = {
         mobile: loginModel.mobile,
         code: loginModel.code,
-      } as unknown as LoginMobileParams
+      } as unknown as LoginMobileParams;
     }
-    const res = await userLoginUsingPost(params)
+    const res = await userLoginUsingPost(params);
     if (res.code === 200) {
-      message.success('登录成功')
+      message.success("登录成功");
       // 获取当前是否存在重定向的链接，如果存在就走重定向的地址
-      const redirect = getQueryParam('redirect', '/')
+      const redirect = getQueryParam("redirect", "/");
       router.push({
         path: redirect,
         replace: true,
-      })
+      });
       // 清理缓存
-      router.go(0)
+      router.go(0);
     } else {
       notification.error({
-        message: '登录失败',
+        message: "登录失败",
         description: res.message,
         duration: 3,
-      })
-      errorAlert.value = false
-      submitLoading.value = false
+      });
+      errorAlert.value = false;
+      submitLoading.value = false;
     }
   } catch (e) {
-    if (e instanceof AxiosError)
-      errorAlert.value = true
+    if (e instanceof AxiosError) errorAlert.value = true;
 
-    submitLoading.value = false
+    submitLoading.value = false;
   }
 }
 
 onMounted(async () => {
-  await delayTimer(300)
-  pageBubble.init(unref(bubbleCanvas)!)
-})
+  await delayTimer(300);
+  pageBubble.init(unref(bubbleCanvas)!);
+});
 
 onBeforeUnmount(() => {
-  pageBubble.removeListeners()
-})
+  pageBubble.removeListeners();
+});
 
-const title = import.meta.env.VITE_GLOB_APP_TITLE
-const description = import.meta.env.VITE_GLOB_APP_DESCRIPTION
-const img = import.meta.env.VITE_GLOB_APP_PICTURE
+const title = import.meta.env.VITE_GLOB_APP_TITLE;
+const description = import.meta.env.VITE_GLOB_APP_DESCRIPTION;
+const img = import.meta.env.VITE_GLOB_APP_PICTURE;
 </script>
 
 <template>
   <div class="login-container">
     <div h-screen w-screen absolute z-10>
-      <canvas ref="bubbleCanvas"/>
+      <canvas ref="bubbleCanvas" />
     </div>
     <div class="login-content flex-center">
       <div class="ant-pro-form-login-main rounded">
         <!-- 登录头部 -->
-        <div
-            class="flex-between h-15 px-4 mb-[2px]"
-        >
+        <div class="flex-between h-15 px-4 mb-[2px]">
           <div class="flex-end">
             <span class="ant-pro-form-login-logo">
-              <img w-full h-full object-cover src="/logo.svg">
+              <img w-full h-full object-cover src="/logo.svg" />
             </span>
             <span class="ant-pro-form-login-title">
               {{ title }}
@@ -144,106 +140,181 @@ const img = import.meta.env.VITE_GLOB_APP_PICTURE
           </div>
           <div class="login-lang flex-center relative z-11">
             <span
-                class="flex-center cursor-pointer text-16px"
-                @click="appStore.toggleTheme(layoutSetting.theme === 'dark' ? 'light' : 'dark')"
+              class="flex-center cursor-pointer text-16px"
+              @click="
+                appStore.toggleTheme(
+                  layoutSetting.theme === 'dark' ? 'light' : 'dark'
+                )
+              "
             >
               <!-- 亮色和暗黑模式切换按钮 -->
               <template v-if="layoutSetting.theme === 'light'">
-                <carbon-moon/>
+                <carbon-moon />
               </template>
               <template v-else>
-                <carbon-sun/>
+                <carbon-sun />
               </template>
             </span>
-            <SelectLang/>
+            <SelectLang />
           </div>
         </div>
-        <a-divider m-0/>
+        <a-divider m-0 />
         <!-- 登录主体 -->
         <div class="box-border flex min-h-[520px]">
           <!-- 登录框左侧 -->
-          <div class="ant-pro-form-login-main-left min-h-[520px] flex-center  bg-[var(--bg-color-container)]">
-            <img :src="img" class="h-5/6 w-5/6">
+          <div
+            class="ant-pro-form-login-main-left min-h-[520px] flex-center bg-[var(--bg-color-container)]"
+          >
+            <img :src="img" class="h-5/6 w-5/6" />
           </div>
-          <a-divider m-0 type="vertical" class="ant-pro-login-divider  min-h-[520px]"/>
+          <a-divider
+            m-0
+            type="vertical"
+            class="ant-pro-login-divider min-h-[520px]"
+          />
           <!-- 登录框右侧 -->
-          <div class="ant-pro-form-login-main-right px-5 w-[335px] flex-center flex-col relative z-11">
+          <div
+            class="ant-pro-form-login-main-right px-5 w-[335px] flex-center flex-col relative z-11"
+          >
             <div class="text-center py-6 text-2xl">
-              {{ t('pages.login.tips') }}
+              {{ t("pages.login.tips") }}
             </div>
             <a-form ref="formRef" :model="loginModel">
               <a-tabs v-model:activeKey="loginModel.type" centered>
-                <a-tab-pane key="account" :tab="t('pages.login.accountLogin.tab')"/>
-                <a-tab-pane key="mobile" :tab="t('pages.login.phoneLogin.tab')"/>
+                <a-tab-pane
+                  key="account"
+                  :tab="t('pages.login.accountLogin.tab')"
+                />
+                <a-tab-pane
+                  key="mobile"
+                  :tab="t('pages.login.phoneLogin.tab')"
+                />
               </a-tabs>
               <!-- 判断是否存在error -->
               <a-alert
-                  v-if="errorAlert && loginModel.type === 'account'" mb-24px
-                  :message="t('pages.login.accountLogin.errorMessage')" type="error" show-icon
+                v-if="errorAlert && loginModel.type === 'account'"
+                mb-24px
+                :message="t('pages.login.accountLogin.errorMessage')"
+                type="error"
+                show-icon
               />
               <a-alert
-                  v-if="errorAlert && loginModel.type === 'mobile'" mb-24px
-                  :message="t('pages.login.phoneLogin.errorMessage')" type="error" show-icon
+                v-if="errorAlert && loginModel.type === 'mobile'"
+                mb-24px
+                :message="t('pages.login.phoneLogin.errorMessage')"
+                type="error"
+                show-icon
               />
               <template v-if="loginModel.type === 'account'">
-                <a-form-item name="username" :rules="[{ required: true, message: t('pages.login.username.required') }]">
+                <a-form-item
+                  name="username"
+                  :rules="[
+                    {
+                      required: true,
+                      message: t('pages.login.username.required'),
+                    },
+                  ]"
+                >
                   <a-input
-                      v-model:value="loginModel.username" allow-clear
-                      autocomplete="off"
-                      :placeholder="t('pages.login.username.placeholder')" size="large" @press-enter="submit"
+                    v-model:value="loginModel.username"
+                    allow-clear
+                    autocomplete="off"
+                    :placeholder="t('pages.login.username.placeholder')"
+                    size="large"
+                    @press-enter="submit"
                   >
                     <template #prefix>
-                      <UserOutlined/>
+                      <UserOutlined />
                     </template>
                   </a-input>
                 </a-form-item>
-                <a-form-item name="password" :rules="[{ required: true, message: t('pages.login.password.required') }]">
+                <a-form-item
+                  name="password"
+                  :rules="[
+                    {
+                      required: true,
+                      message: t('pages.login.password.required'),
+                    },
+                  ]"
+                >
                   <a-input-password
-                      v-model:value="loginModel.password" allow-clear
-                      :placeholder="t('pages.login.password.placeholder')" size="large" @press-enter="submit"
+                    v-model:value="loginModel.password"
+                    allow-clear
+                    :placeholder="t('pages.login.password.placeholder')"
+                    size="large"
+                    @press-enter="submit"
                   >
                     <template #prefix>
-                      <LockOutlined/>
+                      <LockOutlined />
                     </template>
                   </a-input-password>
                 </a-form-item>
               </template>
               <template v-if="loginModel.type === 'mobile'">
                 <a-form-item
-                    name="mobile" :rules="[
-                    { required: true, message: t('pages.login.phoneNumber.required') },
+                  name="mobile"
+                  :rules="[
                     {
-                      pattern: /^(86)?1([38][0-9]|4[579]|5[0-35-9]|6[6]|7[0135678]|9[89])[0-9]{8}$/,
+                      required: true,
+                      message: t('pages.login.phoneNumber.required'),
+                    },
+                    {
+                      pattern:
+                        /^(86)?1([38][0-9]|4[579]|5[0-35-9]|6[6]|7[0135678]|9[89])[0-9]{8}$/,
                       message: t('pages.login.phoneNumber.invalid'),
                     },
                   ]"
                 >
                   <a-input
-                      v-model:value="loginModel.mobile" allow-clear
-                      :placeholder="t('pages.login.phoneNumber.placeholder')" size="large" @press-enter="submit"
+                    v-model:value="loginModel.mobile"
+                    allow-clear
+                    :placeholder="t('pages.login.phoneNumber.placeholder')"
+                    size="large"
+                    @press-enter="submit"
                   >
                     <template #prefix>
-                      <MobileOutlined/>
+                      <MobileOutlined />
                     </template>
                   </a-input>
                 </a-form-item>
-                <a-form-item name="code" :rules="[{ required: true, message: t('pages.login.captcha.required') }]">
+                <a-form-item
+                  name="code"
+                  :rules="[
+                    {
+                      required: true,
+                      message: t('pages.login.captcha.required'),
+                    },
+                  ]"
+                >
                   <div flex items-center>
                     <a-input
-                        v-model:value="loginModel.code"
-                        style="flex: 1 1 0%; transition: width 0.3s ease 0s; margin-right: 8px;" allow-clear
-                        :placeholder="t('pages.login.captcha.placeholder')" size="large" @press-enter="submit"
+                      v-model:value="loginModel.code"
+                      style="
+                        flex: 1 1 0%;
+                        transition: width 0.3s ease 0s;
+                        margin-right: 8px;
+                      "
+                      allow-clear
+                      :placeholder="t('pages.login.captcha.placeholder')"
+                      size="large"
+                      @press-enter="submit"
                     >
                       <template #prefix>
-                        <LockOutlined/>
+                        <LockOutlined />
                       </template>
                     </a-input>
-                    <a-button :loading="codeLoading" :disabled="isActive" size="large" @click="getCode">
+                    <a-button
+                      :loading="codeLoading"
+                      :disabled="isActive"
+                      size="large"
+                      @click="getCode"
+                    >
                       <template v-if="!isActive">
-                        {{ t('pages.login.phoneLogin.getVerificationCode') }}
+                        {{ t("pages.login.phoneLogin.getVerificationCode") }}
                       </template>
                       <template v-else>
-                        {{ resetCounter - counter }} {{ t('pages.getCaptchaSecondText') }}
+                        {{ resetCounter - counter }}
+                        {{ t("pages.getCaptchaSecondText") }}
                       </template>
                     </a-button>
                   </div>
@@ -251,27 +322,44 @@ const img = import.meta.env.VITE_GLOB_APP_PICTURE
               </template>
               <div class="mb-24px flex-between">
                 <a-checkbox v-model:checked="loginModel.remember">
-                  {{ t('pages.login.rememberMe') }}
+                  {{ t("pages.login.rememberMe") }}
                 </a-checkbox>
-                <a>{{ t('pages.login.forgotPassword') }}</a>
+                <a>{{ t("pages.login.forgotPassword") }}</a>
               </div>
-              <a-button type="primary" block :loading="submitLoading" size="large" @click="submit">
-                {{ t('pages.login.submit') }}
+              <a-button
+                type="primary"
+                block
+                :loading="submitLoading"
+                size="large"
+                @click="submit"
+              >
+                {{ t("pages.login.submit") }}
               </a-button>
             </a-form>
             <a-divider>
-              <span class="text-slate-500">{{ t('pages.login.loginWith') }}</span>
+              <span class="text-slate-500">{{
+                t("pages.login.loginWith")
+              }}</span>
             </a-divider>
             <div class="ant-pro-form-login-other">
-              <AlipayCircleFilled class="icon"/>
-              <TaobaoCircleFilled class="icon"/>
-              <WeiboCircleFilled class="icon"/>
+              <AlipayCircleFilled class="icon" />
+              <TaobaoCircleFilled class="icon" />
+              <WeiboCircleFilled class="icon" />
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div py-24px px-50px fixed bottom-0 z-11 w-screen :data-theme="layoutSetting.theme" text-14px/>
+    <div
+      py-24px
+      px-50px
+      fixed
+      bottom-0
+      z-11
+      w-screen
+      :data-theme="layoutSetting.theme"
+      text-14px
+    />
   </div>
 </template>
 
@@ -292,9 +380,9 @@ const img = import.meta.env.VITE_GLOB_APP_PICTURE
 .login-content {
   position: absolute;
   top: 0;
-  left: 0;
   right: 0;
   bottom: 0;
+  left: 0;
 }
 
 .ant-pro-form-login-container {
@@ -304,11 +392,11 @@ const img = import.meta.env.VITE_GLOB_APP_PICTURE
   height: 100%;
   padding: 32px 0;
   overflow: auto;
-  background: inherit
+  background: inherit;
 }
 
 .ant-pro-form-login-header a {
-  text-decoration: none
+  text-decoration: none;
 }
 
 .ant-pro-form-login-title {
@@ -322,13 +410,13 @@ const img = import.meta.env.VITE_GLOB_APP_PICTURE
   width: 44px;
   height: 44px;
   margin-right: 16px;
-  vertical-align: top
+  vertical-align: top;
 }
 
 .ant-pro-form-login-desc {
+  margin-left: 16px;
   color: var(--text-color-1);
   font-size: 14px;
-  margin-left: 16px
 }
 
 .ant-pro-form-login-main-right {
@@ -339,9 +427,8 @@ const img = import.meta.env.VITE_GLOB_APP_PICTURE
 
   .ant-pro-form-login-other {
     line-height: 22px;
-    text-align: center
+    text-align: center;
   }
-
 }
 
 .ant-pro-form-login-main {
@@ -354,7 +441,7 @@ const img = import.meta.env.VITE_GLOB_APP_PICTURE
   font-size: 24px;
   vertical-align: middle;
   cursor: pointer;
-  transition: color .3s;
+  transition: color 0.3s;
 
   &:hover {
     color: var(--pro-ant-color-primary);
@@ -387,7 +474,7 @@ const img = import.meta.env.VITE_GLOB_APP_PICTURE
     display: none;
   }
 
-  .login-media(400px)
+  .login-media(400px);
 }
 
 @media screen and (max-width: 767px) {

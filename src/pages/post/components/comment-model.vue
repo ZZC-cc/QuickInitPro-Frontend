@@ -1,4 +1,3 @@
-<!-- comment-model.vue -->
 <script lang="ts" setup>
 import { ref, watch } from "vue";
 import { getCommentsByPostIdUsingGet } from "@/servers/api/commentController.ts";

@@ -3,11 +3,11 @@ import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { getPostVoByIdUsingGet } from "@/servers/api/postController";
 import PostVO = API.PostVO;
+import CommentModel from "~/pages/post/components/comment-model.vue";
 
 defineOptions({
   name: "BasicProfile",
 });
-import CommentModel from "~/pages/post/components/comment-model.vue";
 import {
   LeftOutlined,
   LikeOutlined,

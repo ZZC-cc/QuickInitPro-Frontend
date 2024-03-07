@@ -6,10 +6,6 @@ import {
   addViewUsingGet,
   getHomeUsingGet,
 } from "~/servers/api/homeController.ts";
-
-defineOptions({
-  name: "Workplace",
-});
 import HomeVO = API.HomeVO;
 import { getNewsNoticeUsingGet } from "~/servers/api/noticeController.ts";
 import ProductVO = API.ProductVO;
@@ -18,6 +14,9 @@ import OrderVO = API.OrderVO;
 import CommentVO = API.CommentVO;
 import Notice = API.Notice;
 
+defineOptions({
+  name: "Workplace",
+});
 const productsList = ref<ProductVO>();
 const postsList = ref<PostVO>();
 const ordersList = ref<OrderVO>();
@@ -198,7 +197,7 @@ function formatTimeAgo(timeString: string) {
           :body-style="{ padding: 0 }"
         >
           <template #extra>
-            <router-link to="/post"> 全部文章</router-link>
+            <router-link to="/post"> 全部文章 </router-link>
           </template>
           <a-card-grid
             v-for="item in postsList"
@@ -251,7 +250,7 @@ function formatTimeAgo(timeString: string) {
           :body-style="{ padding: 0 }"
         >
           <template #extra>
-            <router-link to="/product"> 全部商品</router-link>
+            <router-link to="/product"> 全部商品 </router-link>
           </template>
           <a-card-grid
             v-for="item in productsList"
@@ -302,7 +301,7 @@ function formatTimeAgo(timeString: string) {
           :loading="false"
         >
           <template #extra>
-            <router-link to="/comment-crud-table"> 评论管理</router-link>
+            <router-link to="/comment-crud-table"> 评论管理 </router-link>
           </template>
           <a-list :data-source="commentsList" class="activitiesList">
             <template #renderItem="{ item }">
@@ -380,7 +379,7 @@ function formatTimeAgo(timeString: string) {
           title="最新订单"
         >
           <template #extra>
-            <router-link to="/control/order-crud-table"> 订单管理</router-link>
+            <router-link to="/control/order-crud-table"> 订单管理 </router-link>
           </template>
           <div v-for="(order, index) in ordersList" :key="index" mb-15px>
             <a-row mt-10px>

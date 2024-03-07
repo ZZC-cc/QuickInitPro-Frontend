@@ -1,110 +1,110 @@
 <script setup lang="ts">
-import {ReloadOutlined} from '@ant-design/icons-vue'
-import {message} from 'ant-design-vue'
+import { ReloadOutlined } from "@ant-design/icons-vue";
+import { message } from "ant-design-vue";
 import {
   deleteCommentUsingPost,
   getAllCommentsListUsingGet,
   getCommentBySearchTextUsingGet,
-} from '~/servers/api/commentController.ts'
-import CommentModel from '~/pages/post/components/comment-model.vue'
-import CommentVO = API.CommentVO
+} from "~/servers/api/commentController.ts";
+import CommentModel from "~/pages/post/components/comment-model.vue";
+import CommentVO = API.CommentVO;
 
 const columns = shallowRef([
   {
-    title: '回复人',
-    dataIndex: 'user',
+    title: "回复人",
+    dataIndex: "user",
   },
   {
-    title: '回复内容',
-    dataIndex: 'content',
+    title: "回复内容",
+    dataIndex: "content",
   },
   {
-    title: '回复文章',
-    dataIndex: 'post_name',
+    title: "回复文章",
+    dataIndex: "post_name",
   },
   {
-    title: '创建时间',
-    dataIndex: 'createTime',
+    title: "创建时间",
+    dataIndex: "createTime",
   },
   {
-    title: '操作',
-    dataIndex: 'action',
+    title: "操作",
+    dataIndex: "action",
   },
-])
+]);
 
 onMounted(async () => {
-  await getData()
-})
+  await getData();
+});
 
 async function getData() {
   try {
-    const response = await getAllCommentsListUsingGet()
+    const response = await getAllCommentsListUsingGet();
     // 处理响应数据，将数据赋值给 state.dataSource
-    state.dataSource = response.data || []
+    state.dataSource = response.data || [];
   } catch (error) {
-    message.error(`获取文章数据失败:${error}`)
+    message.error(`获取文章数据失败:${error}`);
   }
 }
 
 async function reload() {
-  await getData()
-  message.success('刷新成功')
+  await getData();
+  message.success("刷新成功");
 }
 
 const state = reactive({
   loading: false,
   queryParams: {
-    name: '',
-    value: '',
-    remark: '',
+    name: "",
+    value: "",
+    remark: "",
   },
   dataSource: [] as CommentVO[], // 添加 dataSource 属性
   pagination: {},
   rowSelections: [],
-})
+});
 
 async function deleteComment(id: any) {
   try {
     const response = await deleteCommentUsingPost({
       id,
-    })
+    });
     if (response.code === 200) {
-      message.success('删除成功')
-      await getData()
+      message.success("删除成功");
+      await getData();
     } else {
-      console.error('删除失败:', response.message)
+      console.error("删除失败:", response.message);
     }
   } catch (error) {
-    console.error('删除错误:', error)
+    console.error("删除错误:", error);
   }
 }
 
-const selectedPostId = ref()
+const selectedPostId = ref();
 
 function handleEdit(postId: any) {
-  selectedPostId.value = postId
-  showCommentModel.value = true
+  selectedPostId.value = postId;
+  showCommentModel.value = true;
 }
 
-const searchText = ref('')
+const searchText = ref("");
 
 async function initQuery(searchText: string) {
-  const res = await getCommentBySearchTextUsingGet({searchText})
+  const res = await getCommentBySearchTextUsingGet({ searchText });
   if (res.code === 200) {
-    state.dataSource = res.data || []
-    message.success('查询成功')
+    state.dataSource = res.data || [];
+    message.success("查询成功");
   } else {
-    message.error(`查询失败:${res.message}`)
+    message.error(`查询失败:${res.message}`);
   }
 }
 
 async function cleanQuery() {
-  searchText.value = ''
-  await getData()
-  message.success('重置成功')
+  searchText.value = "";
+  await getData();
+  message.success("重置成功");
 }
 
-const showCommentModel = ref(false)
+const showCommentModel = ref(false);
 </script>
 
 <template>
@@ -116,7 +116,7 @@ const showCommentModel = ref(false)
             <a-space size="middle">
               <a-button type="primary" ghost @click="reload">
                 <template #icon>
-                  <ReloadOutlined/>
+                  <ReloadOutlined />
                 </template>
                 刷新
               </a-button>
@@ -125,15 +125,13 @@ const showCommentModel = ref(false)
           <a-col :span="6">
             <a-space style="float: right">
               <a-input-search
-                  v-model:value="searchText"
-                  placeholder="请输入搜索内容"
-                  enter-button="查询"
-                  style="width: 250px"
-                  @search="initQuery(searchText)"
+                v-model:value="searchText"
+                placeholder="请输入搜索内容"
+                enter-button="查询"
+                style="width: 250px"
+                @search="initQuery(searchText)"
               />
-              <a-button @click="cleanQuery">
-                重置
-              </a-button>
+              <a-button @click="cleanQuery"> 重置 </a-button>
             </a-space>
           </a-col>
         </a-row>
@@ -142,15 +140,15 @@ const showCommentModel = ref(false)
 
     <a-card>
       <a-table
-          row-key="id"
-          :loading="state.loading"
-          :columns="columns"
-          :data-source="state.dataSource"
-          :pagination="state.pagination"
+        row-key="id"
+        :loading="state.loading"
+        :columns="columns"
+        :data-source="state.dataSource"
+        :pagination="state.pagination"
       >
         <template #bodyCell="scope">
           <template v-if="scope?.column?.dataIndex === 'user'">
-            <a-avatar :src="scope?.record?.user.avatar"/>
+            <a-avatar :src="scope?.record?.user.avatar" />
             <span>&nbsp;&nbsp;{{ scope?.record?.user.name }}</span>
           </template>
           <template v-if="scope?.column?.dataIndex === 'content'">
@@ -165,12 +163,10 @@ const showCommentModel = ref(false)
                 回复
               </a-button>
               <a-popconfirm
-                  title="确定删除吗？"
-                  @confirm="deleteComment(scope?.record.id)"
+                title="确定删除吗？"
+                @confirm="deleteComment(scope?.record.id)"
               >
-                <a-button type="link" style="color: red">
-                  删除
-                </a-button>
+                <a-button type="link" style="color: red"> 删除 </a-button>
               </a-popconfirm>
             </div>
           </template>
@@ -178,19 +174,23 @@ const showCommentModel = ref(false)
       </a-table>
     </a-card>
     <a-modal
-        v-model:visible="showCommentModel"
-        style="width: 800px"
-        @ok="
+      v-model:visible="showCommentModel"
+      style="width: 800px"
+      @ok="
         getData();
         showCommentModel = !showCommentModel;
       "
-        @cancel="
+      @cancel="
         getData();
         showCommentModel = false;
       "
-        @close="showCommentModel = false"
+      @close="showCommentModel = false"
     >
-      <CommentModel :post-id="selectedPostId" style="padding: 0 30px" @ok="getData"/>
+      <CommentModel
+        :post-id="selectedPostId"
+        style="padding: 0 30px"
+        @ok="getData"
+      />
     </a-modal>
   </page-container>
 </template>

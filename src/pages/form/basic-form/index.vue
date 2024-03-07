@@ -1,67 +1,66 @@
 <script setup lang="ts">
-import type { FormInstance } from 'ant-design-vue'
+import type { FormInstance } from "ant-design-vue";
+import RegisterUserDto = API.RegisterUserDto;
+import { userRegisterUsingPost } from "~/servers/api/userController.ts";
+import { message } from "ant-design-vue";
+import { UploadOutlined } from "@ant-design/icons-vue";
+
 defineOptions({
-  name: 'BasicForm',
-})
-import RegisterUserDto = API.RegisterUserDto
-import { userRegisterUsingPost } from '~/servers/api/userController.ts';
-import { message } from 'ant-design-vue';
-import { UploadOutlined } from '@ant-design/icons-vue'
-import { uploadFileUsingPost } from '~/servers/api/fileController.ts'
-const formRef = ref<FormInstance>()
+  name: "BasicForm",
+});
+import { uploadFileUsingPost } from "~/servers/api/fileController.ts";
+
+const formRef = ref<FormInstance>();
+
 async function handleSubmit() {
   try {
-    const res = await userRegisterUsingPost(formState)
+    const res = await userRegisterUsingPost(formState);
     if (res.code === 200) {
-      message.success('注册成功')
-      formRef.value?.resetFields()
+      message.success("注册成功");
+      formRef.value?.resetFields();
+    } else {
+      message.error(res.message);
     }
-    else {
-      message.error(res.message)
-    }
-  }
-  catch (errorInfo) {
-    console.log('Failed:', errorInfo)
+  } catch (errorInfo) {
+    console.log("Failed:", errorInfo);
   }
 }
 
 async function handleReset() {
-  formRef.value?.resetFields()
+  formRef.value?.resetFields();
 }
 
 const formState = reactive<RegisterUserDto>({
-  username: '',
-  password: '',
-  email: '',
-  mobile: '',
-  avatar: '',
-  address: '',
-  sex: '',
-  name: '',
-  description: '',
-  confirmPassword: '',
-})
-const { t } = useI18n()
+  username: "",
+  password: "",
+  email: "",
+  mobile: "",
+  avatar: "",
+  address: "",
+  sex: "",
+  name: "",
+  description: "",
+  confirmPassword: "",
+});
+const { t } = useI18n();
 
 async function handleChange(info) {
-  const uploadedFile = info.file.originFileObj
+  const uploadedFile = info.file.originFileObj;
   try {
     // 调用 uploadFileUsingPost 方法，传入参数 biz="avatar" 和文件对象
     const response = await uploadFileUsingPost(
-      { biz: 'avatar' },
+      { biz: "avatar" },
       {},
-      uploadedFile,
-    )
+      uploadedFile
+    );
     if (response.code == 200) {
-      formState.avatar = response.data
-      message.success('文件上传成功')
+      formState.avatar = response.data;
+      message.success("文件上传成功");
+    } else {
+      message.error(response.message);
     }
-    else {
-      message.error(response.message)
-    }
-  }
-  catch (error) {
-    message.error('文件上传失败')
+  } catch (error) {
+    message.error("文件上传失败");
   }
 }
 </script>
@@ -87,7 +86,8 @@ async function handleChange(info) {
             width="100px"
             height="100px"
             style="border-radius: 50px"
-          /><br>
+          />
+          <br />
           <a-upload name="file" :file-list="[]" @change="handleChange">
             <a-button class="mt-4">
               <UploadOutlined />
@@ -176,15 +176,9 @@ async function handleChange(info) {
           ]"
         >
           <a-radio-group v-model:value="formState.sex">
-            <a-radio value="男">
-              男
-            </a-radio>
-            <a-radio value="女">
-              女
-            </a-radio>
-            <a-radio value="保密">
-              保密
-            </a-radio>
+            <a-radio value="男"> 男 </a-radio>
+            <a-radio value="女"> 女 </a-radio>
+            <a-radio value="保密"> 保密 </a-radio>
           </a-radio-group>
         </a-form-item>
         <a-form-item
@@ -253,9 +247,7 @@ async function handleChange(info) {
           >
             注册
           </a-button>
-          <a-button @-click="handleReset">
-            重置
-          </a-button>
+          <a-button @-click="handleReset"> 重置 </a-button>
         </a-form-item>
       </a-form>
     </a-card>
