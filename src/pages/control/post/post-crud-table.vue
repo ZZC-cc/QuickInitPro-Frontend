@@ -1,17 +1,7 @@
 <script setup lang="ts">
-import {
-  PlusOutlined,
-  ManOutlined,
-  WomanOutlined,
-  EyeInvisibleOutlined,
-  ReloadOutlined,
-} from "@ant-design/icons-vue";
+import { PlusOutlined, ReloadOutlined } from "@ant-design/icons-vue";
 import CrudTableModal from "./components/post-crud-table-modal.vue";
-import {
-  deleteUserUsingDelete,
-  getUsersByCategoryUsingGet,
-  getUsersBySearchTextUsingGet,
-} from "~/servers/api/userController.ts";
+
 import User = API.User;
 import { message } from "ant-design-vue";
 import {
@@ -69,7 +59,7 @@ async function getData() {
     // 处理响应数据，将数据赋值给 state.dataSource
     state.dataSource = response.data || [];
   } catch (error) {
-    message.error("获取文章数据失败:" + error);
+    message.error(`获取文章数据失败:${error}`);
   }
 }
 
@@ -97,13 +87,10 @@ async function handleDelete(record: Post) {
     const res = await deletePostUsingPost({
       post_id: record.id,
     });
-    if (res.code === 200) {
-      message.success("删除成功");
-    } else {
-      message.error(res.data);
-    }
+    if (res.code === 200) message.success("删除成功");
+    else message.error(res.data);
   } catch (e) {
-    message.error("删除失败:" + e);
+    message.error(`删除失败:${e}`);
   } finally {
     await getData();
     close();
@@ -121,10 +108,9 @@ async function handleEdit(record: PostVO) {
 const searchText = ref("");
 
 async function initQuery(searchText: string) {
-  const res = await searchPostBySearchTextUsingGet({ searchText: searchText });
-  if (res.code === 200) {
-    state.dataSource = res.data || [];
-  }
+  const res = await searchPostBySearchTextUsingGet({ searchText });
+  if (res.code === 200) state.dataSource = res.data || [];
+
   message.success("查询成功");
 }
 
@@ -142,7 +128,7 @@ async function cleanQuery() {
         <a-row :span="24">
           <a-col :span="18">
             <a-space size="middle">
-              <a-button type="primary" @click="reload" ghost>
+              <a-button type="primary" ghost @click="reload">
                 <template #icon>
                   <ReloadOutlined />
                 </template>
@@ -165,7 +151,7 @@ async function cleanQuery() {
                 style="width: 250px"
                 @search="initQuery(searchText)"
               />
-              <a-button @click="cleanQuery"> 重置</a-button>
+              <a-button @click="cleanQuery"> 重置 </a-button>
             </a-space>
           </a-col>
         </a-row>
@@ -193,8 +179,8 @@ async function cleanQuery() {
             </div>
           </template>
           <template v-if="scope?.column?.dataIndex === 'tags'">
-            <a-tag v-for="tag in scope?.record?.tagList" color="blue"
-              >{{ tag }}
+            <a-tag v-for="tag in scope?.record?.tagList" color="blue">
+              {{ tag }}
             </a-tag>
           </template>
           <template v-if="scope?.column?.dataIndex === 'post'">
@@ -227,7 +213,7 @@ async function cleanQuery() {
                 cancel-text="取消"
                 @confirm="handleDelete(scope?.record as PostVO)"
               >
-                <a-button type="link" style="color: red"> 删除</a-button>
+                <a-button type="link" style="color: red"> 删除 </a-button>
               </a-popconfirm>
             </div>
           </template>

@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error
 /* eslint-disable */
 import request from 'umi-request';
 /** 创建帖子 POST /api/post/add */

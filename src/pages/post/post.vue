@@ -1,35 +1,33 @@
 <script lang="ts" setup>
 import {
+  DeleteOutlined,
+  EditOutlined,
   LikeOutlined,
   MessageOutlined,
   PlusOutlined,
   ReloadOutlined,
   StarOutlined,
-  EditOutlined,
-  DeleteOutlined
 } from "@ant-design/icons-vue";
+import { message } from "ant-design-vue";
 import {
   deletePostUsingPost,
   getAllTagsUsingGet,
   listPostByPageUsingPost,
   searchPostBySearchTextUsingGet,
 } from "~/servers/api/postController.ts";
-import {message} from "ant-design-vue";
 
-import PostModal from "~/pages/post/components/post-modal.vue";
+import type PostModal from "~/pages/post/components/post-modal.vue";
 import PostVO = API.PostVO;
 import CrudTableModal from "~/pages/post/components/post-modal.vue";
 import CommentModel from "~/pages/post/components/comment-model.vue";
-import {ref} from "vue";
+import { ref } from "vue";
 import router from "~/router";
-import Post from "~/pages/post/post.vue";
 
 const crudTableModal = ref<InstanceType<typeof PostModal>>();
 
-const {username} = useUserStore();
+const { username } = useUserStore();
 
 const formData = ref();
-
 
 async function getData() {
   try {
@@ -39,7 +37,7 @@ async function getData() {
     formData.value = response.data || [];
     totalItems.value = response.data?.length || 0;
   } catch (error) {
-    message.error("获取文章数据失败:" + error);
+    message.error(`获取文章数据失败:${error}`);
   }
 }
 
@@ -50,7 +48,7 @@ async function getTags() {
     const response = await getAllTagsUsingGet();
     tagData.value = response.data || [];
   } catch (error) {
-    message.error("获取文章数据失败:" + error);
+    message.error(`获取文章数据失败:${error}`);
   }
 }
 
@@ -70,10 +68,9 @@ onMounted(async () => {
 const searchText = ref("");
 
 async function initQuery(searchText: string) {
-  const res = await searchPostBySearchTextUsingGet({searchText: searchText});
-  if (res.code === 200) {
-    formData.value = res.data || [];
-  }
+  const res = await searchPostBySearchTextUsingGet({ searchText });
+  if (res.code === 200) formData.value = res.data || [];
+
   message.success("查询成功");
 }
 
@@ -107,7 +104,7 @@ function getArticleDetailLink(postId: any) {
   // 使用路由的 resolve 方法获取文章详情页面的 URL
   const articleDetailUrl = router.resolve({
     name: "PostDetail", // 文章详情页面的路由名称
-    params: {id: postId}, // 文章ID作为路由参数
+    params: { id: postId }, // 文章ID作为路由参数
   });
   return articleDetailUrl.href;
 }
@@ -127,13 +124,10 @@ async function handleDelete(id: any) {
     const res = await deletePostUsingPost({
       post_id: id,
     });
-    if (res.code === 200) {
-      message.success("删除成功");
-    } else {
-      message.error(res.data);
-    }
+    if (res.code === 200) message.success("删除成功");
+    else message.error(res.data);
   } catch (e) {
-    message.error("删除失败:" + e);
+    message.error(`删除失败:${e}`);
   } finally {
     await getData();
     close();
@@ -149,23 +143,23 @@ async function handleDelete(id: any) {
           <a-col :span="18">
             <div>
               <a-button
-                  type="primary"
-                  @click="reload"
-                  ghost
-                  style="margin-right: 10px"
+                type="primary"
+                ghost
+                style="margin-right: 10px"
+                @click="reload"
               >
                 <template #icon>
-                  <ReloadOutlined/>
+                  <ReloadOutlined />
                 </template>
                 刷新
               </a-button>
               <a-button
-                  type="primary"
-                  @click="handleAdd"
-                  style="margin-right: 10px"
+                type="primary"
+                style="margin-right: 10px"
+                @click="handleAdd"
               >
                 <template #icon>
-                  <PlusOutlined/>
+                  <PlusOutlined />
                 </template>
                 发布
               </a-button>
@@ -174,13 +168,13 @@ async function handleDelete(id: any) {
           <a-col :span="6">
             <a-space style="float: right">
               <a-input-search
-                  v-model:value="searchText"
-                  placeholder="请输入搜索内容"
-                  enter-button="查询"
-                  style="width: 250px"
-                  @search="initQuery(searchText)"
+                v-model:value="searchText"
+                placeholder="请输入搜索内容"
+                enter-button="查询"
+                style="width: 250px"
+                @search="initQuery(searchText)"
               />
-              <a-button @click="cleanQuery"> 重置</a-button>
+              <a-button @click="cleanQuery"> 重置 </a-button>
             </a-space>
           </a-col>
         </a-row>
@@ -188,11 +182,12 @@ async function handleDelete(id: any) {
           <a-col :span="24">
             <span>分类：</span>
             <a-button
-                v-for="tag in tagData"
-                :key="tag.id"
-                style="border-radius: 0px; margin-right: 10px"
-                @click="initQuery(tag)"
-            >{{ tag }}
+              v-for="tag in tagData"
+              :key="tag.id"
+              style="border-radius: 0px; margin-right: 10px"
+              @click="initQuery(tag)"
+            >
+              {{ tag }}
             </a-button>
           </a-col>
         </a-row>
@@ -201,33 +196,36 @@ async function handleDelete(id: any) {
     <a-list :data-source="formData" item-layout="vertical">
       <template #renderItem="{ item }">
         <a-card
-            :bordered="false"
-            class="mt-4"
-            :key="item.id"
-            style="margin-top: 20px"
-
+          :key="item.id"
+          :bordered="false"
+          class="mt-4"
+          style="margin-top: 20px"
         >
           <a-list-item-meta style="margin-bottom: 0">
             <template #title>
-              <a :href="getArticleDetailLink(item.id)" class="text-xl font-bold hover-bg-black-90"
-                 style="color: #303030;">{{
-                  item.title
-                }}</a>
+              <a
+                :href="getArticleDetailLink(item.id)"
+                class="text-xl font-bold hover-bg-black-90"
+                style="color: #303030"
+                >{{ item.title }}</a
+              >
             </template>
           </a-list-item-meta>
           <div class="flex flex-col gap-2">
             <div>
-              <a-tag v-for="tag in item.tagList" color="blue">{{ tag }}</a-tag>
+              <a-tag v-for="tag in item.tagList" color="blue">
+                {{ tag }}
+              </a-tag>
             </div>
             <div style="white-space: pre-line">
               {{ item.content.slice(0, 80) }}
-              <span v-if="item.content.length > 80">......<br/></span>
+              <span v-if="item.content.length > 80">......<br /></span>
             </div>
             <div>
               <a :href="getArticleDetailLink(item.id)">阅读详情</a>
             </div>
             <div class="flex items-center gap-2">
-              <a-avatar :src="item.user.avatar" :size="22"/>
+              <a-avatar :src="item.user.avatar" :size="22" />
               <span c-primary>
                 {{ item.user.name }}
               </span>
@@ -239,56 +237,56 @@ async function handleDelete(id: any) {
               </span>
             </div>
           </div>
-          <a-divider/>
+          <a-divider />
           <div>
             <a-row>
               <a-col :span="3">
-                <StarOutlined/>
+                <StarOutlined />
                 {{ item.thumbNum }}
               </a-col>
               <a-col :span="3">
-                <LikeOutlined/>
+                <LikeOutlined />
                 {{ item.favourNum }}
               </a-col>
               <a-col :span="3">
-                <MessageOutlined/>
-                <a @click="toggleComment(item.id)">&nbsp;评论</a></a-col
-              >
+                <MessageOutlined />
+                <a @click="toggleComment(item.id)">&nbsp;评论</a>
+              </a-col>
               <a-col :span="3">
                 <span v-if="item.user.username == username"
-                ><EditOutlined/>
+                  ><EditOutlined />
                   <a @click="handleEdit(item as PostVO)">&nbsp;编辑</a>
-                </span></a-col
-              >
+                </span>
+              </a-col>
               <a-col :span="3">
-                <span v-if="item.user.username == username"
-                >              <a-popconfirm
+                <span v-if="item.user.username == username">
+                  <a-popconfirm
                     title="确定删除该条数据？"
                     ok-text="确定"
                     cancel-text="取消"
                     @confirm="handleDelete(item.id)"
-                ><DeleteOutlined/>
-                  <a style="color: red">&nbsp;删除</a>
-                </a-popconfirm>
-                </span></a-col
-              >
+                    ><DeleteOutlined />
+                    <a style="color: red">&nbsp;删除</a>
+                  </a-popconfirm>
+                </span>
+              </a-col>
             </a-row>
           </div>
           <!-- 根据文章的评论显示状态来决定是否显示评论组件 -->
-          <CommentModel :postId="item.id" v-if="showComment[item.id]"/>
+          <CommentModel v-if="showComment[item.id]" :post-id="item.id" />
         </a-card>
       </template>
     </a-list>
-    <CrudTableModal ref="crudTableModal"/>
+    <CrudTableModal ref="crudTableModal" />
     <a-card style="margin-top: 10px">
       <a-pagination
-          :current="currentPage"
-          :total="totalItems"
-          :pageSize="1"
-          :page="1"
-          :show-total="(total) => `共 ${total} 条`"
-          @change="handlePageChange"
-          style="float: right"
+        :current="currentPage"
+        :total="totalItems"
+        :page-size="1"
+        :page="1"
+        :show-total="(total) => `共 ${total} 条`"
+        style="float: right"
+        @change="handlePageChange"
       />
     </a-card>
   </div>

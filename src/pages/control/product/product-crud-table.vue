@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import {
-  PlusOutlined,
-  ReloadOutlined,
-} from "@ant-design/icons-vue";
+import { PlusOutlined, ReloadOutlined } from "@ant-design/icons-vue";
+import { message } from "ant-design-vue";
 import CrudTableModal from "./components/product-crud-table-modal.vue";
-import {message} from "ant-design-vue";
 import {
-  changeShelvesUsingGet, deleteProductUsingPost,
-  getAllProductVoUsingPost, searchProductBySearchTextUsingGet
+  changeShelvesUsingGet,
+  deleteProductUsingPost,
+  getAllProductVoUsingPost,
+  searchProductBySearchTextUsingGet,
 } from "~/servers/api/productController.ts";
 import ProductVO = API.ProductVO;
 import PostVO = API.PostVO;
 
-const columns = shallowRef([{
-  title: "商品图片",
-  dataIndex: "images",
-},
+const columns = shallowRef([
+  {
+    title: "商品图片",
+    dataIndex: "images",
+  },
   {
     title: "商品名称",
     dataIndex: "title",
@@ -23,7 +23,8 @@ const columns = shallowRef([{
   {
     title: "标签",
     dataIndex: "tags",
-  }, {
+  },
+  {
     title: "商品价格",
     dataIndex: "price",
   },
@@ -63,7 +64,7 @@ async function getData() {
     // 处理响应数据，将数据赋值给 state.dataSource
     state.dataSource = response.data || [];
   } catch (error) {
-    message.error("获取文章数据失败:" + error);
+    message.error(`获取文章数据失败:${error}`);
   }
 }
 
@@ -91,13 +92,10 @@ async function handleDelete(record: ProductVO) {
     const res = await deleteProductUsingPost({
       id: record.id,
     });
-    if (res.code === 200) {
-      message.success("删除成功");
-    } else {
-      message.error(res.data);
-    }
+    if (res.code === 200) message.success("删除成功");
+    else message.error(res.data);
   } catch (e) {
-    message.error("删除失败:" + e);
+    message.error(`删除失败:${e}`);
   } finally {
     await getData();
     close();
@@ -115,10 +113,9 @@ async function handleEdit(record: ProductVO) {
 const searchText = ref("");
 
 async function initQuery(searchText: string) {
-  const res = await searchProductBySearchTextUsingGet({searchText: searchText});
-  if (res.code === 200) {
-    state.dataSource = res.data || [];
-  }
+  const res = await searchProductBySearchTextUsingGet({ searchText });
+  if (res.code === 200) state.dataSource = res.data || [];
+
   message.success("查询成功");
 }
 
@@ -129,15 +126,14 @@ async function cleanQuery() {
 }
 
 async function changeShelvesStatus(id: any) {
-  console.log(id)
-  const res = await changeShelvesUsingGet({id: id})
+  console.log(id);
+  const res = await changeShelvesUsingGet({ id });
   if (res.code === 200) {
-    message.success(res.data)
+    message.success(res.data);
     await getData();
   } else {
-    message.error(res.data)
+    message.error(res.data);
   }
-
 }
 </script>
 
@@ -148,15 +144,15 @@ async function changeShelvesStatus(id: any) {
         <a-row :span="24">
           <a-col :span="18">
             <a-space size="middle">
-              <a-button type="primary" @click="reload" ghost>
+              <a-button type="primary" ghost @click="reload">
                 <template #icon>
-                  <ReloadOutlined/>
+                  <ReloadOutlined />
                 </template>
                 刷新
               </a-button>
               <a-button type="primary" @click="handleAdd">
                 <template #icon>
-                  <PlusOutlined/>
+                  <PlusOutlined />
                 </template>
                 新增
               </a-button>
@@ -165,13 +161,13 @@ async function changeShelvesStatus(id: any) {
           <a-col :span="6">
             <a-space style="float: right">
               <a-input-search
-                  v-model:value="searchText"
-                  placeholder="请输入搜索内容"
-                  enter-button="查询"
-                  style="width: 250px"
-                  @search="initQuery(searchText)"
+                v-model:value="searchText"
+                placeholder="请输入搜索内容"
+                enter-button="查询"
+                style="width: 250px"
+                @search="initQuery(searchText)"
               />
-              <a-button @click="cleanQuery"> 重置</a-button>
+              <a-button @click="cleanQuery"> 重置 </a-button>
             </a-space>
           </a-col>
         </a-row>
@@ -180,20 +176,16 @@ async function changeShelvesStatus(id: any) {
 
     <a-card>
       <a-table
-          row-key="id"
-          :loading="state.loading"
-          :columns="columns"
-          :data-source="state.dataSource"
-          :pagination="state.pagination"
+        row-key="id"
+        :loading="state.loading"
+        :columns="columns"
+        :data-source="state.dataSource"
+        :pagination="state.pagination"
       >
         <template #bodyCell="scope">
           <template v-if="scope?.column?.dataIndex === 'images'">
             <div flex gap-2>
-              <a-image
-                  :src="scope?.record.images"
-                  width="70px"
-                  height="70px"
-              />
+              <a-image :src="scope?.record.images" width="70px" height="70px" />
             </div>
           </template>
           <template v-if="scope?.column?.dataIndex === 'title'">
@@ -203,49 +195,73 @@ async function changeShelvesStatus(id: any) {
           </template>
           <template v-if="scope?.column?.dataIndex === 'tags'">
             <div flex gap-2>
-              <a-tag v-for="tag in scope?.record?.tags" :key="tag.id" color="blue" style="border-radius: 0">
+              <a-tag
+                v-for="tag in scope?.record?.tags"
+                :key="tag.id"
+                color="blue"
+                style="border-radius: 0"
+              >
                 {{ tag }}
               </a-tag>
             </div>
           </template>
           <template v-if="scope?.column?.dataIndex === 'price'">
-            <span style="color: #ff4000"><b>￥{{ scope?.record?.price }}</b></span>
+            <span style="color: #ff4000"
+              ><b>￥{{ scope?.record?.price }}</b></span
+            >
           </template>
           <template v-if="scope?.column?.dataIndex === 'stock'">
-            <span v-if="scope?.record?.stock > 20" style="color: #2ecc71"><b>{{ scope?.record?.stock }}</b></span>
-            <span v-else style="color: red"><b>{{ scope?.record?.stock }}</b></span>
+            <span v-if="scope?.record?.stock > 20" style="color: #2ecc71"
+              ><b>{{ scope?.record?.stock }}</b></span
+            >
+            <span v-else style="color: red"
+              ><b>{{ scope?.record?.stock }}</b></span
+            >
           </template>
           <template v-if="scope?.column?.dataIndex === 'description'">
             <div style="width: 300px">
-              <span style="color: #a3a3a3">{{ scope?.record?.description.slice(0, 100) }}</span>
-              <span v-if="scope?.record?.description.length > 100" style="color: #a3a3a3">...</span></div>
+              <span style="color: #a3a3a3">{{
+                scope?.record?.description.slice(0, 100)
+              }}</span>
+              <span
+                v-if="scope?.record?.description.length > 100"
+                style="color: #a3a3a3"
+                >...</span
+              >
+            </div>
           </template>
           <template v-if="scope?.column?.dataIndex === 'isShelves'">
-            <span v-if="scope?.record?.isShelves === 1" style="color: #2ecc71"><b>上架</b></span>
+            <span v-if="scope?.record?.isShelves === 1" style="color: #2ecc71"
+              ><b>上架</b></span
+            >
             <span v-else style="color: red"><b>下架</b></span>
           </template>
           <template v-if="scope?.column?.dataIndex === 'action'">
             <div flex gap-2>
               <a-button
-                  type="link"
-                  @click="changeShelvesStatus(scope?.record.id)"
+                type="link"
+                @click="changeShelvesStatus(scope?.record.id)"
               >
-                <span v-if="scope?.record?.isShelves === 0" style="color: #2ecc71">上架</span>
+                <span
+                  v-if="scope?.record?.isShelves === 0"
+                  style="color: #2ecc71"
+                  >上架</span
+                >
                 <span v-else style="color: red">下架</span>
               </a-button>
               <a-button
-                  type="link"
-                  @click="handleEdit(scope?.record as PostVO)"
+                type="link"
+                @click="handleEdit(scope?.record as PostVO)"
               >
                 编辑
               </a-button>
               <a-popconfirm
-                  title="确定删除该条数据？"
-                  ok-text="确定"
-                  cancel-text="取消"
-                  @confirm="handleDelete(scope?.record as PostVO)"
+                title="确定删除该条数据？"
+                ok-text="确定"
+                cancel-text="取消"
+                @confirm="handleDelete(scope?.record as PostVO)"
               >
-                <a-button type="link" style="color: red"> 删除</a-button>
+                <a-button type="link" style="color: red"> 删除 </a-button>
               </a-popconfirm>
             </div>
           </template>
@@ -253,7 +269,7 @@ async function changeShelvesStatus(id: any) {
       </a-table>
     </a-card>
 
-    <CrudTableModal ref="crudTableModal" @ok="getData"/>
+    <CrudTableModal ref="crudTableModal" @ok="getData" />
   </page-container>
 </template>
 

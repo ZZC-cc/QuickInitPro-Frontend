@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import {PlusOutlined} from '@ant-design/icons-vue'
-
 const links = [
   {
     title: '用户管理',

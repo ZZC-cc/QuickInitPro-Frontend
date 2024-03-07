@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import {PlusOutlined, ReloadOutlined} from "@ant-design/icons-vue";
+import { PlusOutlined, ReloadOutlined } from "@ant-design/icons-vue";
+import { message, notification } from "ant-design-vue";
 import NoticeTableModal from "~/pages/control/notice/components/notice-crud-table-modal.vue";
 import {
   deleteUsingPost,
@@ -7,7 +8,6 @@ import {
   searchUsingPost,
   switchStatusUsingPost,
 } from "~/servers/api/noticeController.ts";
-import {message, notification} from "ant-design-vue";
 import Notice = API.Notice;
 import router from "~/router";
 
@@ -68,7 +68,7 @@ async function getNoticeData() {
     // 处理响应数据，将数据赋值给 state.dataSource
     state.dataSource = response.data || [];
   } catch (error) {
-    message.error("获取通知数据失败:" + error);
+    message.error(`获取通知数据失败:${error}`);
   }
 }
 
@@ -92,13 +92,10 @@ async function handleDelete(record: Notice) {
     const res = await deleteUsingPost({
       notice_id: record.notice_id,
     });
-    if (res.code === 200) {
-      message.success("删除成功");
-    } else {
-      message.error(res.data);
-    }
+    if (res.code === 200) message.success("删除成功");
+    else message.error(res.data);
   } catch (e) {
-    message.error("删除失败:" + e);
+    message.error(`删除失败:${e}`);
   } finally {
     await getNoticeData();
     close();
@@ -128,11 +125,8 @@ async function showNotice(record: Notice) {
 
 async function handleSwitch(notice_id: number) {
   switchStatusUsingPost(notice_id).then((res) => {
-    if (res.code === 200) {
-      message.success(res.data);
-    } else {
-      message.error(res.data);
-    }
+    if (res.code === 200) message.success(res.data);
+    else message.error(res.data);
   });
   router.replace(`/redirect/%2Fcontrol%2Fnotice-crud-table`);
 }
@@ -140,10 +134,9 @@ async function handleSwitch(notice_id: number) {
 const searchText = ref("");
 
 async function initQuery(searchText: string) {
-  const res = await searchUsingPost({searchText: searchText});
-  if (res.code === 200) {
-    state.dataSource = res.data || [];
-  }
+  const res = await searchUsingPost({ searchText });
+  if (res.code === 200) state.dataSource = res.data || [];
+
   message.success("查询成功");
 }
 
@@ -161,15 +154,15 @@ async function cleanQuery() {
         <a-row :span="24">
           <a-col :span="18">
             <a-space size="middle">
-              <a-button type="primary" @click="reload" ghost>
+              <a-button type="primary" ghost @click="reload">
                 <template #icon>
-                  <ReloadOutlined/>
+                  <ReloadOutlined />
                 </template>
                 刷新
               </a-button>
               <a-button type="primary" @click="handleAdd">
                 <template #icon>
-                  <PlusOutlined/>
+                  <PlusOutlined />
                 </template>
                 新增
               </a-button>
@@ -178,13 +171,13 @@ async function cleanQuery() {
           <a-col :span="6">
             <a-space style="float: right">
               <a-input-search
-                  v-model:value="searchText"
-                  placeholder="请输入搜索内容"
-                  enter-button="查询"
-                  style="width: 250px"
-                  @search="initQuery(searchText)"
+                v-model:value="searchText"
+                placeholder="请输入搜索内容"
+                enter-button="查询"
+                style="width: 250px"
+                @search="initQuery(searchText)"
               />
-              <a-button @click="cleanQuery"> 重置</a-button>
+              <a-button @click="cleanQuery"> 重置 </a-button>
             </a-space>
           </a-col>
         </a-row>
@@ -193,23 +186,23 @@ async function cleanQuery() {
 
     <a-card>
       <a-table
-          row-key="notice_id"
-          :loading="state.loading"
-          :columns="columns"
-          :data-source="state.dataSource"
-          :pagination="state.pagination"
+        row-key="notice_id"
+        :loading="state.loading"
+        :columns="columns"
+        :data-source="state.dataSource"
+        :pagination="state.pagination"
       >
         <template #bodyCell="scope">
           <template v-if="scope?.column?.dataIndex === 'status'">
             <a-switch
-                :checked="true"
-                v-if="scope?.record?.status == 1"
-                @change="handleSwitch(scope?.record.notice_id)"
+              v-if="scope?.record?.status == 1"
+              :checked="true"
+              @change="handleSwitch(scope?.record.notice_id)"
             />
             <a-switch
-                :checked="false"
-                v-else
-                @change="handleSwitch(scope?.record.notice_id)"
+              v-else
+              :checked="false"
+              @change="handleSwitch(scope?.record.notice_id)"
             />
           </template>
           <template v-if="scope?.column?.dataIndex === 'seTime'">
@@ -217,40 +210,40 @@ async function cleanQuery() {
           </template>
           <template v-if="scope?.column?.dataIndex === 'content'">
             <div
-                v-for="(item, index) in scope?.record?.content.split('\n')"
-                :key="index"
+              v-for="(item, index) in scope?.record?.content.split('\n')"
+              :key="index"
             >
               {{ item }}
             </div>
           </template>
           <template v-if="scope?.column?.dataIndex === 'update_user'">
-            <template v-if="!scope?.record?.update_user"> -</template>
+            <template v-if="!scope?.record?.update_user"> - </template>
           </template>
           <template v-if="scope?.column?.dataIndex === 'updateTime'">
-            <template v-if="!scope?.record?.updateTime"> -</template>
+            <template v-if="!scope?.record?.updateTime"> - </template>
           </template>
           <template v-if="scope?.column?.dataIndex === 'action'">
             <div flex gap-2>
               <a-button
-                  type="link"
-                  @click="showNotice(scope?.record as Notice)"
-                  style="color: #2bc903"
+                type="link"
+                style="color: #2bc903"
+                @click="showNotice(scope?.record as Notice)"
               >
                 预览
               </a-button>
               <a-button
-                  type="link"
-                  @click="handleEdit(scope?.record as Notice)"
+                type="link"
+                @click="handleEdit(scope?.record as Notice)"
               >
                 编辑
               </a-button>
               <a-popconfirm
-                  title="确定删除该条数据？"
-                  ok-text="确定"
-                  cancel-text="取消"
-                  @confirm="handleDelete(scope?.record as Notice)"
+                title="确定删除该条数据？"
+                ok-text="确定"
+                cancel-text="取消"
+                @confirm="handleDelete(scope?.record as Notice)"
               >
-                <a-button type="link" style="color: red"> 删除</a-button>
+                <a-button type="link" style="color: red"> 删除 </a-button>
               </a-popconfirm>
             </div>
           </template>
@@ -258,7 +251,7 @@ async function cleanQuery() {
       </a-table>
     </a-card>
 
-    <NoticeTableModal ref="noticeTableModal" @ok="getNoticeData"/>
+    <NoticeTableModal ref="noticeTableModal" @ok="getNoticeData" />
   </page-container>
 </template>
 

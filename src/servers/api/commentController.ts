@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error
 /* eslint-disable */
 import request from 'umi-request';
 /** addComment POST /api/comment/add */

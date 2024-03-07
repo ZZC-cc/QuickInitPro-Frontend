@@ -1,23 +1,28 @@
 <script setup lang="ts">
+import { NotificationTwoTone } from "@ant-design/icons-vue";
+import { message, notification } from "ant-design-vue";
+import EditableLinkGroup from "~/pages/dashboard/workplace/editable-link-group.vue";
 import {
-  NotificationTwoTone
-} from "@ant-design/icons-vue";
-import EditableLinkGroup from '~/pages/dashboard/workplace/editable-link-group.vue'
-import {message, notification} from "ant-design-vue";
-import {addViewUsingGet, getHomeUsingGet} from "~/servers/api/homeController.ts";
+  addViewUsingGet,
+  getHomeUsingGet,
+} from "~/servers/api/homeController.ts";
+
+defineOptions({
+  name: "Workplace",
+});
 import HomeVO = API.HomeVO;
-import {getNewsNoticeUsingGet} from "~/servers/api/noticeController.ts";
+import { getNewsNoticeUsingGet } from "~/servers/api/noticeController.ts";
 import ProductVO = API.ProductVO;
 import PostVO = API.PostVO;
 import OrderVO = API.OrderVO;
 import CommentVO = API.CommentVO;
 import Notice = API.Notice;
 
-const productsList = ref<ProductVO>()
-const postsList = ref<PostVO>()
-const ordersList = ref<OrderVO>()
-const commentsList = ref<CommentVO>()
-const noticeList = ref<Notice>()
+const productsList = ref<ProductVO>();
+const postsList = ref<PostVO>();
+const ordersList = ref<OrderVO>();
+const commentsList = ref<CommentVO>();
+const noticeList = ref<Notice>();
 
 const {
   avatar,
@@ -30,7 +35,7 @@ const {
   username,
   address,
   description,
-} = useUserStore()
+} = useUserStore();
 
 const HomeData = ref<HomeVO>();
 
@@ -43,12 +48,10 @@ async function getData() {
     ordersList.value = response.data?.orderList;
     commentsList.value = response.data?.commentList;
     noticeList.value = response.data?.notice;
-    console.log(noticeList.value)
   } catch (error) {
-    message.error("获取数据失败:" + error);
+    message.error(`获取数据失败:${error}`);
   }
 }
-
 
 const currentTime = ref(new Date());
 
@@ -56,7 +59,7 @@ onMounted(() => {
   updateTime();
   getData();
   setInterval(updateTime, 60000);
-  addViewUsingGet()
+  addViewUsingGet();
   getNewsNoticeUsingGet().then((res) => {
     if (res.code === 200 && res.data) {
       notification.success({
@@ -65,48 +68,37 @@ onMounted(() => {
         duration: 5,
         style: {
           width: "100%",
-          whiteSpace: 'pre-line',
-          marginTop: '30px',
+          whiteSpace: "pre-line",
+          marginTop: "30px",
         },
-      })
+      });
     }
-  })
+  });
 });
 
 const greeting = computed(() => {
   const hour = currentTime.value.getHours();
 
-  if (hour >= 5 && hour < 12) {
-    return '早上好';
-  } else if (hour >= 12 && hour < 14) {
-    return '中午好';
-  } else if (hour >= 14 && hour < 18) {
-    return '下午好';
-  } else if (hour >= 18 && hour < 24) {
-    return '晚上好';
-  } else {
-    return '凌晨好';
-  }
+  if (hour >= 5 && hour < 12) return "早上好";
+  else if (hour >= 12 && hour < 14) return "中午好";
+  else if (hour >= 14 && hour < 18) return "下午好";
+  else if (hour >= 18 && hour < 24) return "晚上好";
+  else return "凌晨好";
 });
 
 function updateTime() {
   currentTime.value = new Date();
 }
 
-defineOptions({
-  name: 'Workplace',
-})
-
 const currentUser = {
-  avatar: avatar,
-  name: name,
+  avatar,
+  name,
   userid: userId,
-  email: email,
-  description: description
-}
+  email,
+  description,
+};
 
-
-const formatTimeAgo = (timeString: string) => {
+function formatTimeAgo(timeString: string) {
   const currentTime = new Date();
   const createTime = new Date(timeString);
   const timeDifference = currentTime.getTime() - createTime.getTime();
@@ -115,16 +107,11 @@ const formatTimeAgo = (timeString: string) => {
   const hours = Math.floor(minutes / 60);
   const days = Math.floor(hours / 24);
 
-  if (days > 0) {
-    return `${days}天前`;
-  } else if (hours > 0) {
-    return `${hours}小时前`;
-  } else if (minutes > 0) {
-    return `${minutes}分钟前`;
-  } else {
-    return `${seconds}秒前`;
-  }
-};
+  if (days > 0) return `${days}天前`;
+  else if (hours > 0) return `${hours}小时前`;
+  else if (minutes > 0) return `${minutes}分钟前`;
+  else return `${seconds}秒前`;
+}
 </script>
 
 <template>
@@ -132,7 +119,7 @@ const formatTimeAgo = (timeString: string) => {
     <template #content>
       <div class="pageHeaderContent">
         <div class="avatar">
-          <a-avatar size="large" :src="currentUser.avatar"/>
+          <a-avatar size="large" :src="currentUser.avatar" />
         </div>
         <div class="content">
           <div class="contentTitle">
@@ -149,25 +136,53 @@ const formatTimeAgo = (timeString: string) => {
     <template #extraContent>
       <div class="extraContent">
         <div class="statItem">
-          <a-statistic title="用户数" :value="HomeData?.userCount" suffix="位"/>
+          <a-statistic
+            title="用户数"
+            :value="HomeData?.userCount"
+            suffix="位"
+          />
         </div>
         <div class="statItem">
-          <a-statistic title="文章数" :value="HomeData?.postCount" suffix="篇"/>
+          <a-statistic
+            title="文章数"
+            :value="HomeData?.postCount"
+            suffix="篇"
+          />
         </div>
         <div class="statItem">
-          <a-statistic title="评论数" :value="HomeData?.commentCount" suffix="条"/>
+          <a-statistic
+            title="评论数"
+            :value="HomeData?.commentCount"
+            suffix="条"
+          />
         </div>
         <div class="statItem">
-          <a-statistic title="商品数" :value="HomeData?.productCount" suffix="件"/>
+          <a-statistic
+            title="商品数"
+            :value="HomeData?.productCount"
+            suffix="件"
+          />
         </div>
         <div class="statItem">
-          <a-statistic title="订单数" :value="HomeData?.orderCount" suffix="单"/>
+          <a-statistic
+            title="订单数"
+            :value="HomeData?.orderCount"
+            suffix="单"
+          />
         </div>
         <div class="statItem">
-          <a-statistic title="订单总金额" :value="HomeData?.orderTotalPrice" suffix="元"/>
+          <a-statistic
+            title="订单总金额"
+            :value="HomeData?.orderTotalPrice"
+            suffix="元"
+          />
         </div>
         <div class="statItem">
-          <a-statistic title="网站访问" :value="HomeData?.visitCount" suffix="次"/>
+          <a-statistic
+            title="网站访问"
+            :value="HomeData?.visitCount"
+            suffix="次"
+          />
         </div>
       </div>
     </template>
@@ -175,37 +190,50 @@ const formatTimeAgo = (timeString: string) => {
     <a-row :gutter="24">
       <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24">
         <a-card
-            class="projectList"
-            :style="{ marginBottom: '24px' }"
-            title="最新文章"
-            :bordered="false"
-            :loading="false"
-            :body-style="{ padding: 0 }"
+          class="projectList"
+          :style="{ marginBottom: '24px' }"
+          title="最新文章"
+          :bordered="false"
+          :loading="false"
+          :body-style="{ padding: 0 }"
         >
           <template #extra>
-            <router-link to="/post">
-              全部文章
-            </router-link>
+            <router-link to="/post"> 全部文章</router-link>
           </template>
-          <a-card-grid v-for="item in postsList" :key="item.id" class="projectGrid">
-            <a-card :body-style="{ padding: 0 }" style="box-shadow: none" :bordered="false">
+          <a-card-grid
+            v-for="item in postsList"
+            :key="item.id"
+            class="projectGrid"
+          >
+            <a-card
+              :body-style="{ padding: 0 }"
+              style="box-shadow: none"
+              :bordered="false"
+            >
               <a-card-meta
-                  :description="item.content.slice(0,100)"
-                  class="w-full"
+                :description="item.content.slice(0, 100)"
+                class="w-full"
               >
                 <template #title>
                   <div class="cardTitle" ml--10px>
-                    <a :href="/postShow/+item.id">
+                    <a :href="/postShow/ + item.id">
                       {{ item.title }}
                     </a>
                   </div>
                 </template>
               </a-card-meta>
               <div mt3 w-full>
-                <a-tag v-for="tag in item.tagList" color="blue" border-rd-0>{{ tag }}</a-tag>
+                <a-tag v-for="tag in item.tagList" color="blue" border-rd-0>
+                  {{ tag }}
+                </a-tag>
               </div>
               <div mt3>
-                <span><a-avatar :src="item.user.avatar" size="small"/><span ml-5px>{{ item.user.name }}</span></span>
+                <span
+                  ><a-avatar :src="item.user.avatar" size="small" /><span
+                    ml-5px
+                    >{{ item.user.name }}</span
+                  ></span
+                >
                 <span c-gray-3 ml3 mr1>|</span>
                 <span class="datetime" ml-2 :title="item.createTime">
                   {{ item.createTime }}
@@ -215,30 +243,33 @@ const formatTimeAgo = (timeString: string) => {
           </a-card-grid>
         </a-card>
         <a-card
-            class="productList"
-            :style="{ marginBottom: '24px' }"
-            title="最新商品"
-            :bordered="false"
-            :loading="false"
-            :body-style="{ padding: 0 }"
+          class="productList"
+          :style="{ marginBottom: '24px' }"
+          title="最新商品"
+          :bordered="false"
+          :loading="false"
+          :body-style="{ padding: 0 }"
         >
           <template #extra>
-            <router-link to="/product">
-              全部商品
-            </router-link>
+            <router-link to="/product"> 全部商品</router-link>
           </template>
-          <a-card-grid v-for="item in productsList" :key="item.id" class="projectGrid">
-            <a-card :body-style="{ padding: 0 }" style="box-shadow: none" :bordered="false">
-              <a-card-meta
-                  class="w-full"
-              >
+          <a-card-grid
+            v-for="item in productsList"
+            :key="item.id"
+            class="projectGrid"
+          >
+            <a-card
+              :body-style="{ padding: 0 }"
+              style="box-shadow: none"
+              :bordered="false"
+            >
+              <a-card-meta class="w-full">
                 <template #description>
                   <a-row :span="24" h-140>
                     <a-col :span="6">
-                      <a-image :src="item.images" w-20px h-20px></a-image>
+                      <a-image :src="item.images" w-20px h-20px />
                     </a-col>
-                    <a-col :span="1">
-                    </a-col>
+                    <a-col :span="1" />
                     <a-col :span="17">
                       {{ item.description }}
                     </a-col>
@@ -253,7 +284,9 @@ const formatTimeAgo = (timeString: string) => {
                 </template>
               </a-card-meta>
               <div mt3>
-                <span text-16px c-red-5 font-bold ml-10px mr-18px>￥{{ item.price }}</span>
+                <span text-16px c-red-5 font-bold ml-10px mr-18px
+                  >￥{{ item.price }}</span
+                >
                 <span class="datetime" ml-2 :title="item.createTime">
                   {{ item.createTime }}
                 </span>
@@ -262,37 +295,36 @@ const formatTimeAgo = (timeString: string) => {
           </a-card-grid>
         </a-card>
         <a-card
-            :body-style="{ padding: 0 }"
-            :bordered="false"
-            class="activeCard"
-            title="评论动态"
-            :loading="false"
+          :body-style="{ padding: 0 }"
+          :bordered="false"
+          class="activeCard"
+          title="评论动态"
+          :loading="false"
         >
           <template #extra>
-            <router-link to="/comment-crud-table">
-              评论管理
-            </router-link>
+            <router-link to="/comment-crud-table"> 评论管理</router-link>
           </template>
-          <a-list
-              :data-source="commentsList"
-              class="activitiesList"
-          >
+          <a-list :data-source="commentsList" class="activitiesList">
             <template #renderItem="{ item }">
               <a-list-item :key="item.id">
                 <a-list-item-meta>
                   <template #title>
                     <span>
-                      <span class="username">{{ item.user.name }}</span>&nbsp;
+                      <span class="username">{{ item.user.name }}</span
+                      >&nbsp;
                       <span class="event">
                         <span>在</span>&nbsp;
-                        <a :href="/postShow/+item.post_id">{{ item.post_name }} </a>&nbsp;
-                        <span>评论</span>&nbsp;
-                        <a :href="/postShow/+item.post_id" bg-gray-1> {{ item.content }} </a>
+                        <a :href="/postShow/ + item.post_id"
+                          >{{ item.post_name }} </a
+                        >&nbsp; <span>评论</span>&nbsp;
+                        <a :href="/postShow/ + item.post_id" bg-gray-1>
+                          {{ item.content }}
+                        </a>
                       </span>
                     </span>
                   </template>
                   <template #avatar>
-                    <a-avatar :src="item.user.avatar"/>
+                    <a-avatar :src="item.user.avatar" />
                   </template>
                   <template #description>
                     <span class="datetime" :title="item.createTime">
@@ -307,10 +339,10 @@ const formatTimeAgo = (timeString: string) => {
       </a-col>
       <a-col :xl="8" :lg="24" :md="24" :sm="24" :xs="24">
         <a-card
-            :style="{ marginBottom: '24px' }"
-            title="最新通知"
-            :bordered="false"
-            :body-style="{ padding: 0 }"
+          :style="{ marginBottom: '24px' }"
+          title="最新通知"
+          :bordered="false"
+          :body-style="{ padding: 0 }"
         >
           <template #extra>
             <router-link to="/control/notice-crud-table">
@@ -319,16 +351,15 @@ const formatTimeAgo = (timeString: string) => {
           </template>
           <a-list item-layout="horizontal" ma p30px>
             <div ma text-16px font-bold w-full mb-20px>
-
               <div>
-                <NotificationTwoTone/>&nbsp;
+                <NotificationTwoTone />&nbsp;
                 {{ noticeList?.title }}
               </div>
             </div>
-            <div style="white-space: pre-line;" ml-20px mr-20px>
+            <div style="white-space: pre-line" ml-20px mr-20px>
               {{ noticeList?.content }}
             </div>
-            <a-divider mt-20px mb-20px/>
+            <a-divider mt-20px mb-20px />
             <div c-gray-4 ml-20px mb--10px>
               {{ noticeList?.create_user }} 发布于
               {{ noticeList?.createTime }}
@@ -336,27 +367,29 @@ const formatTimeAgo = (timeString: string) => {
           </a-list>
         </a-card>
         <a-card
-            :style="{ marginBottom: '24px' }"
-            title="快速开始 / 便捷导航"
-            :bordered="false"
-            :body-style="{ padding: 0 }"
+          :style="{ marginBottom: '24px' }"
+          title="快速开始 / 便捷导航"
+          :bordered="false"
+          :body-style="{ padding: 0 }"
         >
-          <EditableLinkGroup/>
+          <EditableLinkGroup />
         </a-card>
         <a-card
-            :style="{ marginBottom: '24px' }"
-            :bordered="false"
-            title="最新订单"
+          :style="{ marginBottom: '24px' }"
+          :bordered="false"
+          title="最新订单"
         >
           <template #extra>
-            <router-link to="/control/order-crud-table">
-              订单管理
-            </router-link>
+            <router-link to="/control/order-crud-table"> 订单管理</router-link>
           </template>
           <div v-for="(order, index) in ordersList" :key="index" mb-15px>
             <a-row mt-10px>
               <a-col :span="24">
-                <span c-blue-6><a-avatar size="small" :src="order.user.avatar" mr-5px/>{{ order.name }}</span>
+                <span c-blue-6
+                  ><a-avatar size="small" :src="order.user.avatar" mr-5px />{{
+                    order.name
+                  }}</span
+                >
                 <span c-gray-4 ml-10px>{{ order.createTime }}</span>
 
                 <span c-gray-4 mr-5px ml-5px>购买了</span>
@@ -364,34 +397,39 @@ const formatTimeAgo = (timeString: string) => {
             </a-row>
             <a-row mt-10px>
               <a-col :span="24">
-                                <span v-for="(detail, index) in order.orderDetails" :key="index ">
-                      <a-image :src="detail.product.images" width="30px"/>
-                      <span ml-2 mt>{{ detail.product.title }}</span>
-                      <span ml-2 mt>× <a-tag ml-5px>{{ detail.quantity }}</a-tag></span>
-                      <span ml-4 mt c-red-5 font-550>￥{{ detail.price }}</span>
-                  <div h-1px w-full ma true-gray-2></div>
+                <span
+                  v-for="(detail, index) in order.orderDetails"
+                  :key="index"
+                >
+                  <a-image :src="detail.product.images" width="30px" />
+                  <span ml-2 mt>{{ detail.product.title }}</span>
+                  <span ml-2 mt
+                    >× <a-tag ml-5px>{{ detail.quantity }}</a-tag></span
+                  >
+                  <span ml-4 mt c-red-5 font-550>￥{{ detail.price }}</span>
+                  <div h-1px w-full ma true-gray-2 />
                 </span>
               </a-col>
             </a-row>
-            <a-divider v-if="index !== ordersList.length - 1"/>
+            <a-divider v-if="index !== ordersList.length - 1" />
           </div>
         </a-card>
-        <!--        <a-card-->
-        <!--            :body-style="{ paddingTop: '12px', paddingBottom: '12px' }"-->
-        <!--            :bordered="false"-->
-        <!--            title="团队"-->
-        <!--        >-->
-        <!--          <div class="members">-->
-        <!--            <a-row :gutter="48">-->
-        <!--              <a-col v-for="item in projectNotice" :key="`members-item-${item.id}`" :span="12">-->
-        <!--                <router-link :to="item.href">-->
-        <!--                  <a-avatar :src="item.logo" size="small"/>-->
-        <!--                  <span class="member">{{ item.member }}</span>-->
-        <!--                </router-link>-->
-        <!--              </a-col>-->
-        <!--            </a-row>-->
-        <!--          </div>-->
-        <!--        </a-card>-->
+        <!--        <a-card -->
+        <!--            :body-style="{ paddingTop: '12px', paddingBottom: '12px' }" -->
+        <!--            :bordered="false" -->
+        <!--            title="团队" -->
+        <!--        > -->
+        <!--          <div class="members"> -->
+        <!--            <a-row :gutter="48"> -->
+        <!--              <a-col v-for="item in projectNotice" :key="`members-item-${item.id}`" :span="12"> -->
+        <!--                <router-link :to="item.href"> -->
+        <!--                  <a-avatar :src="item.logo" size="small"/> -->
+        <!--                  <span class="member">{{ item.member }}</span> -->
+        <!--                </router-link> -->
+        <!--              </a-col> -->
+        <!--            </a-row> -->
+        <!--          </div> -->
+        <!--        </a-card> -->
       </a-col>
     </a-row>
   </page-container>
@@ -412,7 +450,7 @@ const formatTimeAgo = (timeString: string) => {
   &::before,
   &::after {
     display: table;
-    content: ' ';
+    content: " ";
   }
   &::after {
     clear: both;
@@ -502,7 +540,7 @@ const formatTimeAgo = (timeString: string) => {
       right: 0;
       width: 1px;
       height: 40px;
-      content: '';
+      content: "";
     }
 
     &:last-child {

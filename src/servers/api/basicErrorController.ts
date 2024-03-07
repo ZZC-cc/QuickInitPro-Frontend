@@ -1,43 +1,43 @@
-// @ts-ignore
+// @ts-expect-error
 /* eslint-disable */
-import request from 'umi-request';
+import request from "umi-request";
 
-/** errorHtml GET /api/error */
-export async function errorHtmlUsingGet(options?: { [key: string]: any }) {
-    return request<API.ModelAndView>('/api/error', {
-        method: 'GET',
-        ...(options || {}),
-    });
+/** error GET /api/error */
+export async function errorUsingGet(options?: { [key: string]: any }) {
+  return request<Record<string, any>>("/api/error", {
+    method: "GET",
+    ...(options || {}),
+  });
 }
 
-/** errorHtml PUT /api/error */
-export async function errorHtmlUsingPut(options?: { [key: string]: any }) {
-    return request<API.ModelAndView>('/api/error', {
-        method: 'PUT',
-        ...(options || {}),
-    });
+/** error PUT /api/error */
+export async function errorUsingPut(options?: { [key: string]: any }) {
+  return request<Record<string, any>>("/api/error", {
+    method: "PUT",
+    ...(options || {}),
+  });
 }
 
-/** errorHtml POST /api/error */
-export async function errorHtmlUsingPost(options?: { [key: string]: any }) {
-    return request<API.ModelAndView>('/api/error', {
-        method: 'POST',
-        ...(options || {}),
-    });
+/** error POST /api/error */
+export async function errorUsingPost(options?: { [key: string]: any }) {
+  return request<Record<string, any>>("/api/error", {
+    method: "POST",
+    ...(options || {}),
+  });
 }
 
-/** errorHtml DELETE /api/error */
-export async function errorHtmlUsingDelete(options?: { [key: string]: any }) {
-    return request<API.ModelAndView>('/api/error', {
-        method: 'DELETE',
-        ...(options || {}),
-    });
+/** error DELETE /api/error */
+export async function errorUsingDelete(options?: { [key: string]: any }) {
+  return request<Record<string, any>>("/api/error", {
+    method: "DELETE",
+    ...(options || {}),
+  });
 }
 
-/** errorHtml PATCH /api/error */
-export async function errorHtmlUsingPatch(options?: { [key: string]: any }) {
-    return request<API.ModelAndView>('/api/error', {
-        method: 'PATCH',
-        ...(options || {}),
-    });
+/** error PATCH /api/error */
+export async function errorUsingPatch(options?: { [key: string]: any }) {
+  return request<Record<string, any>>("/api/error", {
+    method: "PATCH",
+    ...(options || {}),
+  });
 }

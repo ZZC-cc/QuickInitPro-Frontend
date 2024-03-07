@@ -1,112 +1,110 @@
 <script setup lang="ts">
-import {ReloadOutlined} from "@ant-design/icons-vue";
-import {message} from "ant-design-vue";
-import {searchPostBySearchTextUsingGet} from "~/servers/api/postController.ts";
-import PostVO = API.PostVO;
+import {ReloadOutlined} from '@ant-design/icons-vue'
+import {message} from 'ant-design-vue'
 import {
   deleteCommentUsingPost,
   getAllCommentsListUsingGet,
   getCommentBySearchTextUsingGet,
-} from "~/servers/api/commentController.ts";
-import CommentModel from "~/pages/post/components/comment-model.vue";
-import CommentVO = API.CommentVO;
+} from '~/servers/api/commentController.ts'
+import CommentModel from '~/pages/post/components/comment-model.vue'
+import CommentVO = API.CommentVO
 
 const columns = shallowRef([
   {
-    title: "回复人",
-    dataIndex: "user",
+    title: '回复人',
+    dataIndex: 'user',
   },
   {
-    title: "回复内容",
-    dataIndex: "content",
+    title: '回复内容',
+    dataIndex: 'content',
   },
   {
-    title: "回复文章",
-    dataIndex: "post_name",
+    title: '回复文章',
+    dataIndex: 'post_name',
   },
   {
-    title: "创建时间",
-    dataIndex: "createTime",
+    title: '创建时间',
+    dataIndex: 'createTime',
   },
   {
-    title: "操作",
-    dataIndex: "action",
+    title: '操作',
+    dataIndex: 'action',
   },
-]);
+])
 
 onMounted(async () => {
-  await getData();
-});
+  await getData()
+})
 
 async function getData() {
   try {
-    const response = await getAllCommentsListUsingGet();
+    const response = await getAllCommentsListUsingGet()
     // 处理响应数据，将数据赋值给 state.dataSource
-    state.dataSource = response.data || [];
+    state.dataSource = response.data || []
   } catch (error) {
-    message.error("获取文章数据失败:" + error);
+    message.error(`获取文章数据失败:${error}`)
   }
 }
 
 async function reload() {
-  await getData();
-  message.success("刷新成功");
+  await getData()
+  message.success('刷新成功')
 }
 
 const state = reactive({
   loading: false,
   queryParams: {
-    name: "",
-    value: "",
-    remark: "",
+    name: '',
+    value: '',
+    remark: '',
   },
   dataSource: [] as CommentVO[], // 添加 dataSource 属性
   pagination: {},
   rowSelections: [],
-});
+})
 
-const deleteComment = async (id: any) => {
+async function deleteComment(id: any) {
   try {
     const response = await deleteCommentUsingPost({
-      id: id,
-    });
+      id,
+    })
     if (response.code === 200) {
-      message.success("删除成功");
-      await getData();
+      message.success('删除成功')
+      await getData()
     } else {
-      console.error("删除失败:", response.message);
+      console.error('删除失败:', response.message)
     }
   } catch (error) {
-    console.error("删除错误:", error);
+    console.error('删除错误:', error)
   }
-};
+}
 
-const selectedPostId = ref();
+const selectedPostId = ref()
 
-const handleEdit = (postId: any) => {
-  selectedPostId.value = postId;
-  showCommentModel.value = true;
-};
+function handleEdit(postId: any) {
+  selectedPostId.value = postId
+  showCommentModel.value = true
+}
 
-const searchText = ref("");
+const searchText = ref('')
 
 async function initQuery(searchText: string) {
-  const res = await getCommentBySearchTextUsingGet({searchText: searchText});
+  const res = await getCommentBySearchTextUsingGet({searchText})
   if (res.code === 200) {
-    state.dataSource = res.data || [];
-    message.success("查询成功");
+    state.dataSource = res.data || []
+    message.success('查询成功')
   } else {
-    message.error("查询失败:" + res.message);
+    message.error(`查询失败:${res.message}`)
   }
 }
 
 async function cleanQuery() {
-  searchText.value = "";
-  await getData();
-  message.success("重置成功");
+  searchText.value = ''
+  await getData()
+  message.success('重置成功')
 }
 
-const showCommentModel = ref(false);
+const showCommentModel = ref(false)
 </script>
 
 <template>
@@ -116,7 +114,7 @@ const showCommentModel = ref(false);
         <a-row :span="24">
           <a-col :span="18">
             <a-space size="middle">
-              <a-button type="primary" @click="reload" ghost>
+              <a-button type="primary" ghost @click="reload">
                 <template #icon>
                   <ReloadOutlined/>
                 </template>
@@ -133,7 +131,9 @@ const showCommentModel = ref(false);
                   style="width: 250px"
                   @search="initQuery(searchText)"
               />
-              <a-button @click="cleanQuery"> 重置</a-button>
+              <a-button @click="cleanQuery">
+                重置
+              </a-button>
             </a-space>
           </a-col>
         </a-row>
@@ -168,7 +168,9 @@ const showCommentModel = ref(false);
                   title="确定删除吗？"
                   @confirm="deleteComment(scope?.record.id)"
               >
-                <a-button type="link" style="color: red">删除</a-button>
+                <a-button type="link" style="color: red">
+                  删除
+                </a-button>
               </a-popconfirm>
             </div>
           </template>

@@ -124,7 +124,7 @@ async function handleChange(info) {
       {},
       uploadedFile,
     )
-    if (response.code == 200) {
+    if (response.code === 200) {
       const avatarUrl = response.data
       formState.avatar = avatarUrl // 假设 response.data 返回的是文件的 URL
       message.success('文件上传成功')
@@ -199,7 +199,8 @@ async function handleChange(info) {
                 保密
               </a-radio>
             </a-radio-group>
-          </a-form-item><a-form-item
+          </a-form-item>
+          <a-form-item
             :label-col="{ span: 24 }"
             :label="t('account.settings.form-phoneNumber')"
             name="phoneNumber"

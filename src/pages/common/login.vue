@@ -5,16 +5,15 @@ import {
   MobileOutlined,
   TaobaoCircleFilled,
   UserOutlined,
-  WeiboCircleFilled
+  WeiboCircleFilled,
 } from '@ant-design/icons-vue'
 import {delayTimer} from '@v-c/utils'
 import {AxiosError} from 'axios'
-import GlobalLayoutFooter from '~/layouts/components/global-footer/index.vue'
+import {message, notification} from 'ant-design-vue'
 import {getQueryParam} from '~/utils/tools'
 import type {LoginMobileParams, LoginParams} from '~@/api/common/login'
 import pageBubble from '@/utils/page-bubble'
-import {userLoginUsingPost} from "~/servers/api/userController.ts";
-import {message, notification} from "ant-design-vue";
+import {userLoginUsingPost} from '~/servers/api/userController.ts'
 
 const message = useMessage()
 const notification = useNotification()
@@ -88,7 +87,7 @@ async function submit() {
         path: redirect,
         replace: true,
       })
-      //清理缓存
+      // 清理缓存
       router.go(0)
     } else {
       notification.error({
@@ -272,8 +271,7 @@ const img = import.meta.env.VITE_GLOB_APP_PICTURE
         </div>
       </div>
     </div>
-    <div py-24px px-50px fixed bottom-0 z-11 w-screen :data-theme="layoutSetting.theme" text-14px>
-    </div>
+    <div py-24px px-50px fixed bottom-0 z-11 w-screen :data-theme="layoutSetting.theme" text-14px/>
   </div>
 </template>
 

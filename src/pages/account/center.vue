@@ -1,78 +1,49 @@
 <script setup lang="ts">
-import {ApartmentOutlined, PhoneOutlined, HomeOutlined, PlusOutlined, MailOutlined} from '@ant-design/icons-vue'
-import {nextTick, reactive, ref} from 'vue'
-import rightContent from './components/right-content.vue'
+import {
+  ApartmentOutlined,
+  HomeOutlined,
+  MailOutlined,
+  PhoneOutlined,
+  PlusOutlined,
+} from "@ant-design/icons-vue";
+import { nextTick, reactive, ref } from "vue";
+import rightContent from "./components/right-content.vue";
 
-const {t} = useI18n()
+const { t } = useI18n();
 
-const inputRef = ref()
+const inputRef = ref();
 const state = reactive({
-  tags: ['专注', '坚持', '很有想法', '执行力强', '乐观'],
+  tags: ["专注", "坚持", "很有想法", "执行力强", "乐观"],
   inputVisible: false,
-  inputValue: '',
-})
+  inputValue: "",
+});
 
-const {
-  avatar,
-  name,
-  email,
-  mobile,
-  sex,
-  userId,
-  role,
-  username,
-  address,
-  description,
-} = useUserStore()
+const { avatar, name, email, mobile, role, address, description } =
+  useUserStore();
 
 function handleClose(removedTag: string) {
-  const tags = state.tags.filter(tag => tag !== removedTag)
-  state.tags = tags
+  const tags = state.tags.filter((tag) => tag !== removedTag);
+  state.tags = tags;
 }
 
 function showInput() {
-  state.inputVisible = true
+  state.inputVisible = true;
   nextTick(() => {
-    inputRef.value.focus()
-  })
+    inputRef.value.focus();
+  });
 }
 
 function handleInputConfirm() {
-  const inputValue = state.inputValue
-  let tags = state.tags
-  if (inputValue && !tags.includes(inputValue))
-    tags = [...tags, inputValue]
+  const inputValue = state.inputValue;
+  let tags = state.tags;
+  if (inputValue && !tags.includes(inputValue)) tags = [...tags, inputValue];
 
   Object.assign(state, {
     tags,
     inputVisible: false,
-    inputValue: '',
-  })
+    inputValue: "",
+  });
 }
-
-interface ITeamDataItem {
-  name: string
-  link: string
-}
-
-const teamData = ref<ITeamDataItem[]>([
-  {
-    name: 'Antdv Pro',
-    link: '/logo.svg',
-  },
-  {
-    name: '学习小组',
-    link: 'https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE.png',
-  },
-  {
-    name: '工作小组',
-    link: 'https://gw.alipayobjects.com/zos/rmsportal/ComBAopevLwENQdKWiIn.png',
-  },
-  {
-    name: '设计团队',
-    link: 'https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png',
-  },
-])
 </script>
 
 <template>
@@ -83,32 +54,37 @@ const teamData = ref<ITeamDataItem[]>([
           <div class="flex justify-center">
             <a-avatar :size="86">
               <template #icon>
-                <img :src="avatar" alt="">
+                <img :src="avatar" alt="" />
               </template>
             </a-avatar>
           </div>
           <div class="flex flex-col items-center justify-center mt-5">
-            <span class="font-bold text-16px">{{ name }}              <span v-if="role=='admin'">
-                <a-tag color="red" style="border-radius: 0;margin-left: 5px">管理员</a-tag>
-              </span></span>
+            <span class="font-bold text-16px"
+              >{{ name }}
+              <span v-if="role === 'admin'">
+                <a-tag color="red" style="border-radius: 0; margin-left: 5px"
+                  >管理员</a-tag
+                >
+              </span></span
+            >
             <span>{{ description }}</span>
           </div>
           <div class="p-8">
             <p>
               <span class="mr-2">
-                <PhoneOutlined/>
+                <PhoneOutlined />
               </span>
               <span>{{ mobile }}</span>
             </p>
             <p>
               <span class="mr-2">
-                <MailOutlined/>
+                <MailOutlined />
               </span>
               <span>{{ email }}</span>
             </p>
             <p>
               <span class="mr-2">
-                <ApartmentOutlined/>
+                <ApartmentOutlined />
               </span>
               <span>
                 {{ description }}
@@ -116,7 +92,7 @@ const teamData = ref<ITeamDataItem[]>([
             </p>
             <p>
               <span class="mr-2">
-                <HomeOutlined/>
+                <HomeOutlined />
               </span>
               <span>
                 {{ address }}
@@ -125,7 +101,7 @@ const teamData = ref<ITeamDataItem[]>([
           </div>
           <div mb-16>
             <p>
-              {{ t('account.center.tags') }}
+              {{ t("account.center.tags") }}
             </p>
             <template v-for="(tag, index) in state.tags" :key="tag">
               <a-tooltip v-if="tag.length > 20" :title="tag">
@@ -138,44 +114,46 @@ const teamData = ref<ITeamDataItem[]>([
               </a-tag>
             </template>
             <a-input
-                v-if="state.inputVisible"
-                ref="inputRef"
-                v-model:value="state.inputValue"
-                type="text"
-                size="small"
-                :style="{ width: '78px' }"
-                @blur="handleInputConfirm"
-                @keyup.enter="handleInputConfirm"
+              v-if="state.inputVisible"
+              ref="inputRef"
+              v-model:value="state.inputValue"
+              type="text"
+              size="small"
+              :style="{ width: '78px' }"
+              @blur="handleInputConfirm"
+              @keyup.enter="handleInputConfirm"
             />
-            <a-tag v-else style="background: #fff; border-style: dashed" @click="showInput">
-              <PlusOutlined/>
+            <a-tag
+              v-else
+              style="background: #fff; border-style: dashed"
+              @click="showInput"
+            >
+              <PlusOutlined />
             </a-tag>
           </div>
-          <!--          <div class="mt-10">-->
-          <!--            <p>-->
-          <!--              {{ t('account.cneter.team') }}-->
-          <!--            </p>-->
-          <!--            <div class="flex flex-wrap justify-between">-->
-          <!--              <span v-for="(item, index) in teamData" :key="index" class="flex items-center w-120px mb-5">-->
-          <!--                <a-avatar :size="26" class="mr-2">-->
-          <!--                  <template #icon>-->
-          <!--                    <img :src="item.link" alt="">-->
-          <!--                  </template>-->
-          <!--                </a-avatar>-->
-          <!--                <span>{{ item.name }}</span>-->
-          <!--              </span>-->
-          <!--            </div>-->
-          <!--          </div>-->
+          <!--          <div class="mt-10"> -->
+          <!--            <p> -->
+          <!--              {{ t('account.cneter.team') }} -->
+          <!--            </p> -->
+          <!--            <div class="flex flex-wrap justify-between"> -->
+          <!--              <span v-for="(item, index) in teamData" :key="index" class="flex items-center w-120px mb-5"> -->
+          <!--                <a-avatar :size="26" class="mr-2"> -->
+          <!--                  <template #icon> -->
+          <!--                    <img :src="item.link" alt=""> -->
+          <!--                  </template> -->
+          <!--                </a-avatar> -->
+          <!--                <span>{{ item.name }}</span> -->
+          <!--              </span> -->
+          <!--            </div> -->
+          <!--          </div> -->
         </a-card>
       </a-col>
       <!-- right-content -->
       <a-col :span="17">
-        <right-content/>
+        <right-content />
       </a-col>
     </a-row>
   </div>
 </template>
 
-<style scoped lang="less">
-
-</style>
+<style scoped lang="less"></style>

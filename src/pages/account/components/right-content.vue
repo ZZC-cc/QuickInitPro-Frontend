@@ -1,41 +1,38 @@
 <script setup lang="ts">
-import {ref} from 'vue'
-import articleTab from './article-tab.vue'
-import applicationTab from './order-tab.vue'
-import proTab from './pro-tab.vue'
+import { ref } from "vue";
+import articleTab from "./article-tab.vue";
 import PostVO = API.PostVO;
-import {listMyPostVoUsingPost} from "~/servers/api/postController.ts";
+import { listMyPostVoUsingPost } from "~/servers/api/postController.ts";
 import OrderTab from "~/pages/account/components/order-tab.vue";
 
-const {t} = useI18n()
+// const { t } = useI18n()
 
-const activeKey = ref()
+const activeKey = ref();
 
-
-const dataSource = ref<PostVO[]>()
+const dataSource = ref<PostVO[]>();
 
 async function getData() {
-  const res = await listMyPostVoUsingPost()
-  dataSource.value = res.data
+  const res = await listMyPostVoUsingPost();
+  dataSource.value = res.data;
 }
 
 onMounted(() => {
-  getData()
-})
+  getData();
+});
 </script>
 
 <template>
   <a-card :borderer="false">
     <a-tabs v-model:activeKey="activeKey">
       <a-tab-pane key="1" tab="文章">
-        <article-tab :data-source="dataSource"/>
+        <article-tab :data-source="dataSource" />
       </a-tab-pane>
       <a-tab-pane key="2" tab="订单" force-render>
-        <order-tab/>
+        <OrderTab />
       </a-tab-pane>
-      <!--      <a-tab-pane key="3" :tab="t('account.center.project')">-->
-      <!--        <pro-tab/>-->
-      <!--      </a-tab-pane>-->
+      <!--      <a-tab-pane key="3" :tab="t('account.center.project')"> -->
+      <!--        <pro-tab/> -->
+      <!--      </a-tab-pane> -->
     </a-tabs>
   </a-card>
 </template>
