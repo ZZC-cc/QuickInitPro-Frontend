@@ -19,6 +19,7 @@ export default [
     meta: {
       title: "文章列表",
       icon: "ReadOutlined",
+      access: [AccessEnum.USER],
     },
   },
   {
@@ -28,6 +29,7 @@ export default [
     meta: {
       title: "商品列表",
       icon: "GiftOutlined",
+      access: [AccessEnum.USER],
     },
   },
   {
@@ -39,6 +41,46 @@ export default [
       icon: "ProfileOutlined",
       access: [AccessEnum.UNKNOW],
     },
+  },
+  {
+    path: "/list",
+    redirect: "/list/",
+    name: "List",
+    meta: {
+      title: "列表页面",
+      icon: "OrderedListOutlined",
+      access: [AccessEnum.ADMIN],
+    },
+    component: basicRouteMap.RouteView,
+    children: [
+      {
+        path: "/post",
+        name: "Post",
+        component: () => import("~/pages/post/post.vue"),
+        meta: {
+          title: "文章列表",
+          icon: "ReadOutlined",
+        },
+      },
+      {
+        path: "/product",
+        name: "Product",
+        component: () => import("~/pages/product/product-card-list.vue"),
+        meta: {
+          title: "商品列表",
+          icon: "GiftOutlined",
+        },
+      },
+      {
+        path: "/task",
+        name: "Task",
+        component: () => import("~/pages/task/task-list.vue"),
+        meta: {
+          title: "任务列表",
+          icon: "FieldTimeOutlined",
+        },
+      },
+    ],
   },
   {
     path: "/control",
@@ -136,7 +178,7 @@ export default [
       // {
       //   path: "/control/basic-list",
       //   name: "BasicList",
-      //   component: () => import("~/pages/control/basic-list.vue"),
+      //   component: () => import("~/pages/control/task-list.vue"),
       //   meta: {
       //     title: "标准列表",
       //   },
@@ -549,7 +591,7 @@ export default [
   //     {
   //       path: "/list/basic-list",
   //       name: "BasicList",
-  //       component: () => import("~/pages/list/basic-list.vue"),
+  //       component: () => import("~/pages/list/task-list.vue"),
   //       meta: {
   //         title: "标准列表",
   //         locale: "menu.list.basic-list",

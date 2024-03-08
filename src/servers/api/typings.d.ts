@@ -1,125 +1,110 @@
 declare namespace API {
-  interface BaseResponseboolean {
+  type BaseResponseboolean = {
     code?: number;
     data?: boolean;
     message?: string;
-  }
-
-  interface BaseResponseHomeVO {
+  };
+  type BaseResponseHomeVO = {
     code?: number;
     data?: HomeVO;
     message?: string;
-  }
-
-  interface BaseResponseListCommentVO {
+  };
+  type BaseResponseListCommentVO = {
     code?: number;
     data?: CommentVO[];
     message?: string;
-  }
-
-  interface BaseResponseListNotice {
+  };
+  type BaseResponseListNotice = {
     code?: number;
     data?: Notice[];
     message?: string;
-  }
-
-  interface BaseResponseListOrderVO {
+  };
+  type BaseResponseListOrderVO = {
     code?: number;
     data?: OrderVO[];
     message?: string;
-  }
-
-  interface BaseResponseListPostVO {
+  };
+  type BaseResponseListPostVO = {
     code?: number;
     data?: PostVO[];
     message?: string;
-  }
-
-  interface BaseResponseListProductVO {
+  };
+  type BaseResponseListProductVO = {
     code?: number;
     data?: ProductVO[];
     message?: string;
-  }
-
-  interface BaseResponseListstring {
+  };
+  type BaseResponseListstring = {
     code?: number;
     data?: string[];
     message?: string;
-  }
-
-  interface BaseResponseListTaskVO {
+  };
+  type BaseResponseListTaskVO = {
     code?: number;
     data?: TaskVO[];
     message?: string;
-  }
-
-  interface BaseResponseListUser {
+  };
+  type BaseResponseListUser = {
     code?: number;
     data?: User[];
     message?: string;
-  }
-
-  interface BaseResponselong {
+  };
+  type BaseResponselong = {
     code?: number;
     data?: number;
     message?: string;
-  }
-
-  interface BaseResponseNotice {
+  };
+  type BaseResponseNotice = {
     code?: number;
     data?: Notice;
     message?: string;
-  }
-
-  interface BaseResponseOrderVO {
+  };
+  type BaseResponseOrderVO = {
     code?: number;
     data?: OrderVO;
     message?: string;
-  }
-
-  interface BaseResponsePostVO {
+  };
+  type BaseResponsePostVO = {
     code?: number;
     data?: PostVO;
     message?: string;
-  }
-
-  interface BaseResponsestring {
+  };
+  type BaseResponsestring = {
     code?: number;
     data?: string;
     message?: string;
-  }
-
-  interface BaseResponseUser {
+  };
+  type BaseResponseTaskData = {
+    code?: number;
+    data?: TaskData;
+    message?: string;
+  };
+  type BaseResponseUser = {
     code?: number;
     data?: User;
     message?: string;
-  }
-
-  interface BaseResponseUserVO {
+  };
+  type BaseResponseUserVO = {
     code?: number;
     data?: UserVO;
     message?: string;
-  }
-
-  interface changeShelvesUsingGETParams {
+  };
+  type changeShelvesUsingGETParams = {
     /** id */
     id: number;
-  }
-
-  interface CommentAddRequest {
+  };
+  type CommentAddRequest = {
     content?: string;
     parent_id?: number;
     post_id?: number;
     root_parent_id?: number;
     user_id?: number;
     user_name?: string;
-  }
-
-  interface CommentDeleteRequest {
+  };
+  type CommentDeleteRequest = {
     id?: number;
-  }
-
-  interface CommentVO {
+  };
+  type CommentVO = {
     child?: CommentVO[];
     content?: string;
     createTime?: string;
@@ -131,9 +116,8 @@ declare namespace API {
     updateTime?: string;
     user?: UserVO;
     user_id?: number;
-  }
-
-  interface CreateNoticeDto {
+  };
+  type CreateNoticeDto = {
     content?: string;
     create_user?: string;
     end_time?: string;
@@ -141,9 +125,8 @@ declare namespace API {
     start_time?: string;
     status?: number;
     title?: string;
-  }
-
-  interface CreateUserDto {
+  };
+  type CreateUserDto = {
     /** 家庭住址 */
     address?: string;
     /** 头像 */
@@ -166,65 +149,53 @@ declare namespace API {
     status?: number;
     /** 账号 */
     username?: string;
-  }
-
-  interface DeleteNoticeDto {
+  };
+  type DeleteNoticeDto = {
     /** 通知id */
     notice_id?: number;
-  }
-
-  interface DeleteRequest {
+  };
+  type DeleteRequest = {
     id?: number;
-  }
-
-  interface deleteUserUsingDELETEParams {
+  };
+  type deleteUserUsingDELETEParams = {
     /** user_id */
     user_id: number;
-  }
-
-  interface getCommentBySearchTextUsingGETParams {
+  };
+  type getCommentBySearchTextUsingGETParams = {
     /** searchText */
     searchText: string;
-  }
-
-  interface getCommentsByPostIdUsingGETParams {
+  };
+  type getCommentsByPostIdUsingGETParams = {
     /** postId */
     postId: number;
-  }
-
-  interface getOrderVOByIdUsingGETParams {
+  };
+  type getOrderVOByIdUsingGETParams = {
     /** id */
     id: number;
-  }
-
-  interface getPostVOByIdUsingGETParams {
+  };
+  type getPostVOByIdUsingGETParams = {
     /** id */
     id?: number;
-  }
-
-  interface getProductsByTagsUsingGETParams {
+  };
+  type getProductsByTagsUsingGETParams = {
     /** tags */
     tags?: string;
-  }
-
-  interface getUserByUserIdUsingGETParams {
+  };
+  type getUserByUserIdUsingGETParams = {
     /** user_id */
     user_id?: number;
-  }
-
-  interface getUsersByCategoryUsingGETParams {
+  };
+  type getUsersByCategoryUsingGETParams = {
     /** category */
     category?: string;
     /** ascending */
     ascending?: boolean;
-  }
-
-  interface getUsersBySearchTextUsingGETParams {
+  };
+  type getUsersBySearchTextUsingGETParams = {
     /** searchText */
     searchText?: string;
-  }
-
-  interface HomeVO {
+  };
+  type HomeVO = {
     commentCount?: number;
     commentList?: CommentVO[];
     notice?: Notice;
@@ -237,14 +208,12 @@ declare namespace API {
     productList?: ProductVO[];
     userCount?: number;
     visitCount?: number;
-  }
-
-  interface LoginRequest {
+  };
+  type LoginRequest = {
     password?: string;
     username?: string;
-  }
-
-  interface ModelAndView {
+  };
+  type ModelAndView = {
     empty?: boolean;
     model?: Record<string, any>;
     modelMap?: Record<string, any>;
@@ -320,9 +289,8 @@ declare namespace API {
       | "VARIANT_ALSO_NEGOTIATES";
     view?: View;
     viewName?: string;
-  }
-
-  interface Notice {
+  };
+  type Notice = {
     content?: string;
     /** 创建时间 */
     createTime?: string;
@@ -338,9 +306,8 @@ declare namespace API {
     /** 更新时间 */
     updateTime?: string;
     update_user?: string;
-  }
-
-  interface OrderCreateRequest {
+  };
+  type OrderCreateRequest = {
     address?: string;
     count?: number;
     name?: string;
@@ -349,31 +316,27 @@ declare namespace API {
     phone?: string;
     totalPrice?: number;
     userId?: number;
-  }
-
-  interface OrderDetailCreateRequest {
+  };
+  type OrderDetailCreateRequest = {
     orderId?: number;
     price?: number;
     productId?: number;
     quantity?: number;
     total?: number;
-  }
-
-  interface OrderDetailVO {
+  };
+  type OrderDetailVO = {
     orderId?: number;
     price?: number;
     product?: ProductVO;
     productId?: number;
     quantity?: number;
     total?: number;
-  }
-
-  interface OrderUpdateRequest {
+  };
+  type OrderUpdateRequest = {
     id?: number;
     status?: string;
-  }
-
-  interface OrderVO {
+  };
+  type OrderVO = {
     address?: string;
     count?: number;
     createTime?: string;
@@ -389,32 +352,27 @@ declare namespace API {
     updateTime?: string;
     user?: UserVO;
     userId?: number;
-  }
-
-  interface PostAddRequest {
+  };
+  type PostAddRequest = {
     content?: string;
     tagList?: string[];
     title?: string;
-  }
-
-  interface PostDeleteRequest {
+  };
+  type PostDeleteRequest = {
     post_id?: number;
-  }
-
-  interface PostQueryRequest {
+  };
+  type PostQueryRequest = {
     current?: number;
     pageSize?: number;
     searchText?: string;
-  }
-
-  interface PostUpdateRequest {
+  };
+  type PostUpdateRequest = {
     content?: string;
     id?: number;
     tagList?: string[];
     title?: string;
-  }
-
-  interface PostVO {
+  };
+  type PostVO = {
     content?: string;
     createTime?: string;
     favourNum?: number;
@@ -427,18 +385,16 @@ declare namespace API {
     updateTime?: string;
     user?: UserVO;
     userId?: number;
-  }
-
-  interface ProductAddRequest {
+  };
+  type ProductAddRequest = {
     description?: string;
     images?: string;
     price?: number;
     stock?: number;
     tags?: string;
     title?: string;
-  }
-
-  interface ProductUpdateRequest {
+  };
+  type ProductUpdateRequest = {
     description?: string;
     id?: number;
     images?: string;
@@ -447,9 +403,8 @@ declare namespace API {
     stock?: number;
     tags?: string;
     title?: string;
-  }
-
-  interface ProductVO {
+  };
+  type ProductVO = {
     createTime?: string;
     description?: string;
     id?: number;
@@ -460,9 +415,8 @@ declare namespace API {
     tags?: string[];
     title?: string;
     updateTime?: string;
-  }
-
-  interface RegisterUserDto {
+  };
+  type RegisterUserDto = {
     /** 家庭住址 */
     address?: string;
     /** 头像 */
@@ -483,29 +437,25 @@ declare namespace API {
     sex?: string;
     /** 账号 */
     username?: string;
-  }
-
-  interface searchOrderBySearchTextUsingGETParams {
+  };
+  type searchOrderBySearchTextUsingGETParams = {
     /** searchText */
     searchText?: string;
-  }
-
-  interface searchPostBySearchTextUsingGETParams {
+  };
+  type searchPostBySearchTextUsingGETParams = {
     /** searchText */
     searchText?: string;
-  }
-
-  interface searchProductBySearchTextUsingGETParams {
+  };
+  type searchProductBySearchTextUsingGETParams = {
     /** searchText */
     searchText?: string;
-  }
-
-  interface searchUsingPOSTParams {
+  };
+  type searchUsingPOSTParams = {
     /** searchText */
     searchText?: string;
-  }
-
-  interface TaskAddRequest {
+  };
+  type TaskAddRequest = {
+    endTime?: string;
     linkId?: number;
     principalId?: number;
     priority?: string;
@@ -513,9 +463,28 @@ declare namespace API {
     status?: string;
     taskName?: string;
     userId?: number;
-  }
-
-  interface TaskUpdateRequest {
+  };
+  type TaskCategoryRequest = {
+    ascending?: string;
+    category?: string;
+  };
+  type TaskData = {
+    doingTaskCount?: number;
+    finishTaskCount?: number;
+    taskCount?: number;
+    unFinishTaskCount?: number;
+  };
+  type TaskGetStatusRequest = {
+    status?: string;
+    userId?: number;
+  };
+  type TaskGetUserRequest = {
+    userId?: number;
+  };
+  type TaskSearchRequest = {
+    searchText?: string;
+  };
+  type TaskUpdateRequest = {
     endTime?: string;
     id?: number;
     linkId?: number;
@@ -526,9 +495,8 @@ declare namespace API {
     status?: string;
     taskName?: string;
     userId?: number;
-  }
-
-  interface TaskVO {
+  };
+  type TaskVO = {
     createTime?: string;
     endTime?: string;
     id?: number;
@@ -544,9 +512,8 @@ declare namespace API {
     updateTime?: string;
     user?: UserVO;
     userId?: number;
-  }
-
-  interface UpdateByAdminRequest {
+  };
+  type UpdateByAdminRequest = {
     /** 家庭住址 */
     address?: string;
     /** 头像 */
@@ -570,9 +537,8 @@ declare namespace API {
     user_id?: number;
     /** 账号 */
     username?: string;
-  }
-
-  interface UpdateByUserRequest {
+  };
+  type UpdateByUserRequest = {
     /** 家庭住址 */
     address?: string;
     /** 头像 */
@@ -591,9 +557,8 @@ declare namespace API {
     user_id?: number;
     /** 账号 */
     username?: string;
-  }
-
-  interface UpdateNoticeDto {
+  };
+  type UpdateNoticeDto = {
     content?: string;
     end_time?: string;
     /** 通知id */
@@ -603,9 +568,8 @@ declare namespace API {
     status?: number;
     title?: string;
     update_user?: string;
-  }
-
-  interface UpdatePasswordRequest {
+  };
+  type UpdatePasswordRequest = {
     /** 确认新密码 */
     confirmPassword?: string;
     /** 新密码 */
@@ -613,13 +577,11 @@ declare namespace API {
     /** 旧密码 */
     oldPassword?: string;
     user_id?: number;
-  }
-
-  interface uploadFileUsingPOSTParams {
+  };
+  type uploadFileUsingPOSTParams = {
     biz?: string;
-  }
-
-  interface User {
+  };
+  type User = {
     /** 家庭住址 */
     address?: string;
     /** 头像 */
@@ -649,9 +611,8 @@ declare namespace API {
     user_id?: number;
     /** 账号 */
     username?: string;
-  }
-
-  interface UserVO {
+  };
+  type UserVO = {
     /** 家庭住址 */
     address?: string;
     /** 头像 */
@@ -678,9 +639,8 @@ declare namespace API {
     user_id?: number;
     /** 账号 */
     username?: string;
-  }
-
-  interface View {
+  };
+  type View = {
     contentType?: string;
-  }
+  };
 }

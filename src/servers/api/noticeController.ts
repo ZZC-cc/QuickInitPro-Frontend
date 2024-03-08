@@ -1,4 +1,4 @@
-// @ts-expect-error
+// @ts-ignore
 /* eslint-disable */
 import request from 'umi-request';
 /** 创建通知接口 POST /api/notice/create */

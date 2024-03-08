@@ -11,7 +11,7 @@ defineProps<{
   dataSource: IDataItem[];
 }>();
 
-const { avatar } = useUserStore();
+const { avatar, name } = useUserStore();
 
 function getArticleDetailLink(postId: any) {
   // 使用路由的 resolve 方法获取文章详情页面的 URL
@@ -61,7 +61,7 @@ function getArticleDetailLink(postId: any) {
                   </template>
                 </a-avatar>
                 <span c-blue-6>
-                  {{ item.name }}
+                  {{ name }}
                 </span>
                 <span c-gray-3 ml-10px mr-10px> | </span>
                 <span style="color: rgb(185, 185, 185)">

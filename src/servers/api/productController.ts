@@ -1,4 +1,4 @@
-// @ts-expect-error
+// @ts-ignore
 /* eslint-disable */
 import request from 'umi-request';
 /** 添加商品 POST /api/product/add */
