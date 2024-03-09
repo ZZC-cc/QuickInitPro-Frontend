@@ -77,7 +77,16 @@ export default [
         component: () => import("~/pages/task/task-list.vue"),
         meta: {
           title: "任务列表",
-          icon: "FieldTimeOutlined",
+          icon: "CarryOutOutlined",
+        },
+      },
+      {
+        path: "/score",
+        name: "Score",
+        component: () => import("~/pages/score/table-list.vue"),
+        meta: {
+          title: "成绩列表",
+          icon: "CalculatorOutlined",
         },
       },
     ],
@@ -88,7 +97,7 @@ export default [
     name: "Control",
     meta: {
       title: "管理页面",
-      icon: "TableOutlined",
+      icon: "AppstoreOutlined",
       access: [AccessEnum.ADMIN],
     },
     component: basicRouteMap.RouteView,
@@ -124,7 +133,16 @@ export default [
         component: () => import("~/pages/control/task/task-crud-table.vue"),
         meta: {
           title: "任务管理",
-          icon: "FieldTimeOutlined",
+          icon: "CarryOutOutlined",
+        },
+      },
+      {
+        path: "/control/score-crud-table",
+        name: "ScoreTable",
+        component: () => import("~/pages/control/score/score-crud-table.vue"),
+        meta: {
+          title: "成绩管理",
+          icon: "CalculatorOutlined",
         },
       },
       {

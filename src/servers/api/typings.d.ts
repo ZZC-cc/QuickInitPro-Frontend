@@ -34,6 +34,11 @@ declare namespace API {
     data?: ProductVO[];
     message?: string;
   };
+  type BaseResponseListScoreVO = {
+    code?: number;
+    data?: ScoreVO[];
+    message?: string;
+  };
   type BaseResponseListstring = {
     code?: number;
     data?: string[];
@@ -74,9 +79,9 @@ declare namespace API {
     data?: string;
     message?: string;
   };
-  type BaseResponseTaskData = {
+  type BaseResponseTaskDataVO = {
     code?: number;
-    data?: TaskData;
+    data?: TaskDataVO;
     message?: string;
   };
   type BaseResponseUser = {
@@ -438,6 +443,42 @@ declare namespace API {
     /** 账号 */
     username?: string;
   };
+  type ScoreCreateRequest = {
+    /** 关联评分id */
+    linkId?: number;
+  };
+  type ScoreUpdateRequest = {
+    /** 评价 */
+    appraisal?: string;
+    /** id */
+    id?: number;
+    /** 分数 */
+    score?: number;
+  };
+  type ScoreVO = {
+    /** 评价 */
+    appraisal?: string;
+    /** 创建时间 */
+    createTime?: string;
+    /** id */
+    id?: number;
+    /** 关联评分id */
+    linkId?: number;
+    /** 评分用户VO */
+    markUser?: UserVO;
+    /** 评分用户 id */
+    markUserId?: number;
+    /** 分数 */
+    score?: number;
+    /** 关联文章 */
+    task?: TaskVO;
+    /** 更新时间 */
+    updateTime?: string;
+    /** 用户VO */
+    user?: UserVO;
+    /** 用户id */
+    userId?: number;
+  };
   type searchOrderBySearchTextUsingGETParams = {
     /** searchText */
     searchText?: string;
@@ -448,6 +489,9 @@ declare namespace API {
   };
   type searchProductBySearchTextUsingGETParams = {
     /** searchText */
+    searchText?: string;
+  };
+  type SearchRequest = {
     searchText?: string;
   };
   type searchUsingPOSTParams = {
@@ -468,7 +512,7 @@ declare namespace API {
     ascending?: string;
     category?: string;
   };
-  type TaskData = {
+  type TaskDataVO = {
     doingTaskCount?: number;
     finishTaskCount?: number;
     taskCount?: number;

@@ -52,7 +52,7 @@ export async function getTaskDataUsingPost(
   body: API.TaskGetUserRequest,
   options?: { [key: string]: any }
 ) {
-  return request<API.BaseResponseTaskData>("/api/task/get/task/data", {
+  return request<API.BaseResponseTaskDataVO>("/api/task/get/task/data", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

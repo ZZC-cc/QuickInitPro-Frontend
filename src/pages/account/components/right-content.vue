@@ -5,6 +5,7 @@ import PostVO = API.PostVO;
 import { listMyPostVoUsingPost } from "~/servers/api/postController.ts";
 import OrderTab from "~/pages/account/components/order-tab.vue";
 import TaskTab from "~/pages/account/components/task-tab.vue";
+import ScoreTab from "~/pages/account/components/score-tab.vue";
 
 // const { t } = useI18n()
 
@@ -25,14 +26,17 @@ onMounted(() => {
 <template>
   <a-card :borderer="false">
     <a-tabs v-model:activeKey="activeKey">
-      <a-tab-pane key="1" tab="任务">
-        <task-tab />
-      </a-tab-pane>
-      <a-tab-pane key="3" tab="文章">
+      <a-tab-pane key="1" tab="文章">
         <article-tab :data-source="dataSource" />
       </a-tab-pane>
-      <a-tab-pane key="2" tab="订单" force-render>
+      <a-tab-pane key="2" tab="任务">
+        <task-tab />
+      </a-tab-pane>
+      <a-tab-pane key="3" tab="订单" force-render>
         <OrderTab />
+      </a-tab-pane>
+      <a-tab-pane key="4" tab="成绩" force-render>
+        <score-tab />
       </a-tab-pane>
     </a-tabs>
   </a-card>
